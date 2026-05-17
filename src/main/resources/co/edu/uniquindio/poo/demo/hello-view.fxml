@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.Pane?>
+
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.poo.demo.VC.MenuPrincipalVC">
+   <children>
+      <Label layoutX="259.0" layoutY="20.0" text="Taller Mecanico" />
+      <Button fx:id="bttCliente" layoutX="69.0" layoutY="64.0" mnemonicParsing="false" onAction="#AbrirMenuCliente" text="Cliente" />
+      <Button fx:id="bttFactura" layoutX="69.0" layoutY="118.0" mnemonicParsing="false" onAction="#AbirMenuFactura" text="Factura" />
+      <Button fx:id="bttMecanico" layoutX="69.0" layoutY="175.0" mnemonicParsing="false" onAction="#AbrirMecanico" text="Mecanico" />
+      <Button fx:id="bttOrden" layoutX="69.0" layoutY="241.0" mnemonicParsing="false" onAction="#AbirOrden" text="Orden" />
+      <Button fx:id="bttPago" layoutX="248.0" layoutY="64.0" mnemonicParsing="false" onAction="#AbrirPago" text="Pago" />
+      <Button fx:id="bttRepuesto" layoutX="248.0" layoutY="118.0" mnemonicParsing="false" onAction="#AbrirRepuesto" text="Repuesto" />
+      <Button fx:id="bttServicio" layoutX="259.0" layoutY="200.0" mnemonicParsing="false" onAction="#AbrirServicio" text="Servicio" />
+      <Button fx:id="bttVehiculo" layoutX="266.0" layoutY="266.0" mnemonicParsing="false" onAction="#AbrirVehiculo" text="Vehiculo" />
+   </children>
+</Pane>
