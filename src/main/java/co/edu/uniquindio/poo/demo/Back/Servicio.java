@@ -79,13 +79,42 @@ public class Servicio{
         this.repuestos = repuestos;
     }
 
+    public void agregarRepuesto(Repuesto repuesto) {
+        if (repuesto != null && !repuestos.contains(repuesto)) {
+            repuestos.add(repuesto);
+        }
+    }
 
-    public void calcularPrecioRepuestos() {
+
+    /**
+     * Retorna los nombres de los mecánicos separados por coma
+     */
+    /**
+     * Retorna los nombres de los mecánicos separados por coma
+     * Ejemplo: "Jose, Lucas, Pedro"
+     * @return String con los nombres de los mecánicos
+     */
+    public String getNombresRepuestos() {
+        if (repuestos.isEmpty()) {
+            return "Sin asignar";
+        }
+        StringBuilder nombres = new StringBuilder();
+        for (int i = 0; i < repuestos.size(); i++) {
+            nombres.append(repuestos.get(i).getNombre());
+            if (i < repuestos.size() - 1) {
+                nombres.append(", ");
+            }
+        }
+        return nombres.toString();
+    }
+
+
+    public Double calcularPrecioRepuestos() {
         double total = 0.0;
 
         if (repuestos == null || repuestos.isEmpty()) {
             setPrecioRepuestos(0.0);
-            return;
+            return null;
         }
 
         for (Repuesto repuesto : repuestos) {
@@ -96,6 +125,7 @@ public class Servicio{
         }
 
         setPrecioRepuestos(total);
+        return total;
     }
 
 

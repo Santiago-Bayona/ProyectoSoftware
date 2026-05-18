@@ -1,5 +1,7 @@
 package co.edu.uniquindio.poo.demo.Controller;
 
+import co.edu.uniquindio.poo.demo.Back.Orden;
+import co.edu.uniquindio.poo.demo.Back.Repuesto;
 import co.edu.uniquindio.poo.demo.Back.Servicio;
 import co.edu.uniquindio.poo.demo.Back.Taller;
 
@@ -39,6 +41,22 @@ public class ServicioController {
             return false;
         }
         return taller.eliminarServicio(cedula);
+    }
+
+    public Collection<Orden> obtenerListaOrden() {
+        if (taller == null) {
+            System.err.println("Error: No se puede obtener la lista de Ordens porque la taller es null.");
+            return null;
+        }
+        return taller.getOrdenes();
+    }
+
+    public Collection<Repuesto> obtenerListaRepuestos() {
+        if (taller == null) {
+            System.err.println("Error: No se puede obtener la lista de Ordens porque la taller es null.");
+            return null;
+        }
+        return taller.getRespuestos();
     }
 
 

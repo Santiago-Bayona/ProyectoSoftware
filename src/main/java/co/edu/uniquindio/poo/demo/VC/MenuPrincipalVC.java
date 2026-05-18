@@ -45,7 +45,11 @@ public class MenuPrincipalVC {
 
     @FXML
     void AbirMenuFactura(ActionEvent event) {
+        try {
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -77,7 +81,11 @@ public class MenuPrincipalVC {
 
     @FXML
     void AbrirPago(ActionEvent event) {
-
+        try {
+            app.Pago();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -91,7 +99,11 @@ public class MenuPrincipalVC {
 
     @FXML
     void AbrirServicio(ActionEvent event) {
-
+        try {
+            app.Servicio();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML

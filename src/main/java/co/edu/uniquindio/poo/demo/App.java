@@ -199,6 +199,60 @@ public class App extends Application {
         }
     }
 
+    public void Pago() {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(App.class.getResource("Pago.fxml"));
+            Pane rootLayout = (Pane) loader.load();
+            PagoVC arbitroVC = loader.getController();
+            arbitroVC.setApp(this);
+
+            rootLayout.setOnMousePressed(event -> {
+                xOffset = event.getSceneX();
+                yOffset = event.getSceneY();
+            });
+
+            rootLayout.setOnMouseDragged(event -> {
+                primaryStage.setX(event.getScreenX() - xOffset);
+                primaryStage.setY(event.getScreenY() - yOffset);
+            });
+
+            Scene scene = new Scene(rootLayout);
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    public void Servicio() {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(App.class.getResource("Servicio.fxml"));
+            Pane rootLayout = (Pane) loader.load();
+            ServicioVC arbitroVC = loader.getController();
+            arbitroVC.setApp(this);
+
+            rootLayout.setOnMousePressed(event -> {
+                xOffset = event.getSceneX();
+                yOffset = event.getSceneY();
+            });
+
+            rootLayout.setOnMouseDragged(event -> {
+                primaryStage.setX(event.getScreenX() - xOffset);
+                primaryStage.setY(event.getScreenY() - yOffset);
+            });
+
+            Scene scene = new Scene(rootLayout);
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
     public void inicializarData() {
 
         Cliente cliente = new Cliente("10245", "jose","321145", "hddgbhdh@gmail.com", "hdhdhdhd", Estado.Activo);

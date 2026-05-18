@@ -103,7 +103,7 @@ public class OrdenVC {
 
     @FXML
     void ModificarOrden(ActionEvent event) {
-
+        modificarOrden();
     }
 
     @FXML
@@ -141,6 +141,7 @@ public class OrdenVC {
         }
 
         ordenController = new OrdenController(App.taller);
+        obtenerorden();
         obtenerVehiculon();
         obtenerMecanicos();
         initView();
@@ -179,7 +180,11 @@ public class OrdenVC {
      */
     private void obtenerorden() {
         if (ordenController != null) {
-            listaOrden.addAll(ordenController.obtenerListaOrden());
+            Collection<Orden> ords = ordenController.obtenerListaOrden();
+            if (ords != null) {
+                listaOrden.clear();
+                listaOrden.addAll(ords);
+            }
         } else {
             System.err.println("PacienteController no está inicializado.");
         }
@@ -194,11 +199,14 @@ public class OrdenVC {
         tbOrden.getItems().clear();
         tbOrden.setItems(listaOrden);
         tbVehiculo.setItems(listaVehiculo);
+        tbMecanico.setItems(listaMecanicos);
         tbMecanico.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
         listenerSelectionorden();
         listenerSelectionVehiculo();
         listenerSelectionMecanico();
     }
+
 
     /**
      *Metodo que configura la vinculacion de datos en las tablas
@@ -214,7 +222,9 @@ public class OrdenVC {
         tbcVehiculo.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getVehiculo().getPlaca()));
         tbPlaca.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getPlaca()));
         tbcNombreMecanico.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNombre()));
-
+        tbcMecanicos.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getNombresMecanicos())
+        );
 
 
     }
