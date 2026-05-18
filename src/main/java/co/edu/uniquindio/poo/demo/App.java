@@ -255,6 +255,35 @@ public class App extends Application {
 
     }
 
+    public void Factura() {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(App.class.getResource("Factura.fxml"));
+            Pane rootLayout = (Pane) loader.load();
+            FacturaVC arbitroVC = loader.getController();
+            arbitroVC.setApp(this);
+
+            rootLayout.setOnMousePressed(event -> {
+                xOffset = event.getSceneX();
+                yOffset = event.getSceneY();
+            });
+
+            rootLayout.setOnMouseDragged(event -> {
+                primaryStage.setX(event.getScreenX() - xOffset);
+                primaryStage.setY(event.getScreenY() - yOffset);
+            });
+
+            Scene scene = new Scene(rootLayout);
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+
+    }
+
     public void inicializarData() {
 
         Cliente cliente = new Cliente("10245", "jose","321145", "hddgbhdh@gmail.com", "hdhdhdhd", Estado.Activo);
@@ -267,6 +296,97 @@ public class App extends Application {
 
         Vehiculo vehiculo = new Vehiculo("ABC123","Toyota","2024", "15000", cliente, Vehiculo.Tipo.Camioneta );
         taller.agregarVehiculo(vehiculo);
+
+        Repuesto r1 = new Repuesto(
+                "Filtro de aceite",
+                "REP001",
+                "Bosch",
+                12.99,
+                15
+        );
+
+        Repuesto r2 = new Repuesto(
+                "Pastillas de freno",
+                "REP002",
+                "Brembo",
+                45.50,
+                10
+        );
+
+        Repuesto r3 = new Repuesto(
+                "Batería 12V",
+                "REP003",
+                "ACDelco",
+                120.00,
+                6
+        );
+
+        Repuesto r4 = new Repuesto(
+                "Bujía Iridium",
+                "REP004",
+                "NGK",
+                18.75,
+                20
+        );
+
+        Repuesto r5 = new Repuesto(
+                "Radiador",
+                "REP005",
+                "Denso",
+                210.40,
+                4
+        );
+
+        Repuesto r6 = new Repuesto(
+                "Amortiguador delantero",
+                "REP006",
+                "Monroe",
+                89.99,
+                8
+        );
+
+        Repuesto r7 = new Repuesto(
+                "Alternador",
+                "REP007",
+                "Valeo",
+                275.30,
+                3
+        );
+
+        Repuesto r8 = new Repuesto(
+                "Correa de distribución",
+                "REP008",
+                "Gates",
+                65.90,
+                12
+        );
+
+        Repuesto r9 = new Repuesto(
+                "Bomba de gasolina",
+                "REP009",
+                "Delphi",
+                155.80,
+                5
+        );
+
+        Repuesto r10 = new Repuesto(
+                "Llanta Rin 17",
+                "REP010",
+                "Michelin",
+                198.99,
+                9
+        );
+
+        taller.agregarRespuesto(r1);
+        taller.agregarRespuesto(r2);
+        taller.agregarRespuesto(r3);
+        taller.agregarRespuesto(r4);
+        taller.agregarRespuesto(r5);
+        taller.agregarRespuesto(r6);
+        taller.agregarRespuesto(r7);
+        taller.agregarRespuesto(r8);
+        taller.agregarRespuesto(r9);
+        taller.agregarRespuesto(r10);
 
     }
 }

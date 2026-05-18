@@ -1,6 +1,8 @@
 package co.edu.uniquindio.poo.demo.Controller;
 
 import co.edu.uniquindio.poo.demo.Back.Factura;
+import co.edu.uniquindio.poo.demo.Back.Pago;
+import co.edu.uniquindio.poo.demo.Back.Servicio;
 import co.edu.uniquindio.poo.demo.Back.Taller;
 
 import java.util.Collection;
@@ -39,6 +41,26 @@ public class FacturaController {
             return false;
         }
         return taller.eliminarFactura(cedula);
+    }
+
+    public Collection<Pago> obtenerListaPagos() {
+        if (taller == null) {
+            System.err.println("Error: No se puede obtener la lista de Pago es null.");
+            return null;
+        }
+
+        return taller.getPagos();
+
+    }
+
+    public Collection<Servicio> obtenerListaServicio() {
+        if (taller == null) {
+            System.err.println("Error: No se puede obtener la lista de servicios es null.");
+            return null;
+        }
+
+        return taller.getServicios();
+
     }
 
 

@@ -2,14 +2,17 @@ package co.edu.uniquindio.poo.demo.Back;
 
 import java.util.LinkedList;
 
-public class Servicio{
+public class Servicio {
 
     public String idServicio, descripcion;
     public double precioManoObra, precioRepuestos;
     public EstadoServicio estadoServicio;
     public LinkedList<Repuesto> repuestos;
     public Orden orden;
-    public enum EstadoServicio{
+
+    private boolean stockDescontado = false;
+
+    public enum EstadoServicio {
         En_Proceso, Finalizado, Cancelado
     }
 
@@ -85,42 +88,37 @@ public class Servicio{
         }
     }
 
-
-    /**
-     * Retorna los nombres de los mecánicos separados por coma
-     */
-    /**
-     * Retorna los nombres de los mecánicos separados por coma
-     * Ejemplo: "Jose, Lucas, Pedro"
-     * @return String con los nombres de los mecánicos
-     */
     public String getNombresRepuestos() {
         if (repuestos.isEmpty()) {
             return "Sin asignar";
         }
+
         StringBuilder nombres = new StringBuilder();
+
         for (int i = 0; i < repuestos.size(); i++) {
             nombres.append(repuestos.get(i).getNombre());
+
             if (i < repuestos.size() - 1) {
                 nombres.append(", ");
             }
         }
+
         return nombres.toString();
     }
 
 
+    // SOLO CALCULA PRECIO
     public Double calcularPrecioRepuestos() {
         double total = 0.0;
 
         if (repuestos == null || repuestos.isEmpty()) {
             setPrecioRepuestos(0.0);
-            return null;
+            return 0.0;
         }
 
         for (Repuesto repuesto : repuestos) {
             if (repuesto != null) {
                 total += repuesto.getPrecio();
-                repuesto.setStock(repuesto.getStock() - 1);
             }
         }
 
@@ -129,8 +127,41 @@ public class Servicio{
     }
 
 
+    // SOLO DESCUENTA STOCK UNA VEZ
+    public boolean descontarStockRepuestos() {
 
+        // evitar descuento doble
+        if (stockDescontado) {
+            return false;
+        }
 
+        if (repuestos == null || repuestos.isEmpty()) {
+            return true;
+        }
+
+        // validar stock primero
+        for (Repuesto repuesto : repuestos) {
+            if (repuesto != null && repuesto.getStock() <= 0) {
+                System.out.println(
+                        "No hay stock para: " + repuesto.getNombre()
+                );
+                return false;
+            }
+        }
+
+        // descontar
+        for (Repuesto repuesto : repuestos) {
+            if (repuesto != null) {
+                repuesto.setStock(
+                        repuesto.getStock() - 1
+                );
+            }
+        }
+
+        stockDescontado = true;
+
+        return true;
+    }
 
 
     @Override

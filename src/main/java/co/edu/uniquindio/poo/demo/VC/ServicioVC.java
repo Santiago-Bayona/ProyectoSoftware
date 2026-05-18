@@ -312,10 +312,16 @@ public class ServicioVC {
             return;
         }
 
-        Servicio Servicio = buildServicio();
-        if (Servicio != null && servicioController.crearServicio(Servicio)) {
-            listaServicio.add(Servicio);
-            limpiarCampos();
+        Servicio servicio = buildServicio();
+
+        if (servicio != null) {
+
+            servicio.descontarStockRepuestos();
+
+            if (servicioController.crearServicio(servicio)) {
+                listaServicio.add(servicio);
+                limpiarCampos();
+            }
         }
     }
 
@@ -372,13 +378,18 @@ public class ServicioVC {
         }
 
         Servicio ServicioActualizada = buildServicio();
+
+
         if (ServicioActualizada != null && servicioController.actualizarServicio(selectedServicio.getIdServicio(), ServicioActualizada)) {
+            ServicioActualizada.descontarStockRepuestos();
             int index = listaServicio.indexOf(selectedServicio);
             listaServicio.set(index, ServicioActualizada);
             limpiarCampos();
             limpiarSeleccion();
         }
     }
+
+
 
     /**
      * Metodo que limpia la seleccion de la tabla

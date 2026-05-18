@@ -46,7 +46,7 @@ public class MenuPrincipalVC {
     @FXML
     void AbirMenuFactura(ActionEvent event) {
         try {
-
+            app.Factura();
         } catch (Exception e) {
             e.printStackTrace();
         }

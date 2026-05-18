@@ -46,7 +46,7 @@ public class Factura {
         this.pago = pago;
     }
 
-    public void CalcularTotal() {
+    public Double CalcularTotal() {
 
         double impuesto1 = 0.1;
         double impuesto2 = 0.2;
@@ -60,7 +60,7 @@ public class Factura {
         }
 
         setTotal(totalA);
-
+        return totalA;
     }
 
     @Override

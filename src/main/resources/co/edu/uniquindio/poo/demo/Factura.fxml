@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Pane?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="608.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.poo.demo.VC.FacturaVC">
+    <children>
+        <Label layoutX="286.0" layoutY="6.0" text="Factura" />
+        <Label layoutX="46.0" layoutY="54.0" text="ID" />
+        <TextField fx:id="txtID" layoutX="115.0" layoutY="50.0" />
+        <TableView fx:id="tbFactura" layoutX="-1.0" layoutY="200.0" prefHeight="200.0" prefWidth="519.0">
+            <columns>
+                <TableColumn fx:id="tbcID" prefWidth="99.0" text="ID" />
+                <TableColumn fx:id="tbcPago" prefWidth="141.0" text="Pago" />
+                <TableColumn fx:id="tbcServicio" prefWidth="149.0" text="Servicio" />
+                <TableColumn fx:id="tbcPrecio" prefWidth="129.0" text="Precio" />
+            </columns>
+        </TableView>
+        <Button fx:id="bttAgregarFactura" layoutX="534.0" layoutY="229.0" mnemonicParsing="false" onAction="#AgregarFactura" prefHeight="25.0" prefWidth="62.0" text="Agregar" />
+        <Button fx:id="bttEliminarFactura" layoutX="534.0" layoutY="275.0" mnemonicParsing="false" onAction="#EliminarFactura" prefHeight="25.0" prefWidth="62.0" text="Eliminar" />
+        <Button fx:id="bttModificarFactura" layoutX="529.0" layoutY="320.0" mnemonicParsing="false" onAction="#ModificarFactura" prefHeight="25.0" prefWidth="72.0" text="Modificar" />
+        <Button fx:id="bttLimpiarFactura" layoutX="529.0" layoutY="361.0" mnemonicParsing="false" onAction="#LimpiarFactura" prefHeight="25.0" prefWidth="72.0" text="Limpiar" />
+        <Button fx:id="bttVolver" mnemonicParsing="false" onAction="#Volver" text="Volver" />
+      <TableView fx:id="tbServicio" layoutX="334.0" layoutY="50.0" prefHeight="134.0" prefWidth="200.0">
+        <columns>
+          <TableColumn fx:id="tbcIdServicio" editable="false" prefWidth="199.0" text="Servicio" />
+        </columns>
+      </TableView>
+      <TableView fx:id="tbPago" layoutX="46.0" layoutY="86.0" prefHeight="97.0" prefWidth="219.0">
+         <columns>
+            <TableColumn fx:id="tbcIdPago" editable="false" prefWidth="218.0" text="Pago" />
+         </columns>
+      </TableView>
+    </children>
+</Pane>
