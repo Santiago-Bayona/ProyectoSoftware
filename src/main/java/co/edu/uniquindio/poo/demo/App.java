@@ -251,6 +251,8 @@ public class App extends Application {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+
+        s
     }
 
     public void inicializarData() {
