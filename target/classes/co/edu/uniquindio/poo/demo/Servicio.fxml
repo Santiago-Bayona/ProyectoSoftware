@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Pane?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="672.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.poo.demo.VC.ServicioVC">
+    <children>
+        <Label layoutX="286.0" layoutY="6.0" text="Servicio" />
+        <Label layoutX="46.0" layoutY="54.0" text="ID" />
+        <Label layoutX="46.0" layoutY="90.0" text="Precio MO" />
+        <Label layoutX="556.0" layoutY="54.0" text="Descripcion" />
+        <TextField fx:id="txtID" layoutX="115.0" layoutY="50.0" />
+        <TextField fx:id="txtPrecioMO" layoutX="115.0" layoutY="86.0" />
+        <ComboBox fx:id="cbxEstado" layoutX="281.0" layoutY="50.0" prefHeight="25.0" prefWidth="209.0" promptText="Estado" />
+        <TableView fx:id="tbServicio" layoutX="-1.0" layoutY="200.0" prefHeight="200.0" prefWidth="588.0">
+            <columns>
+                <TableColumn fx:id="tbcID" prefWidth="64.0" text="ID" />
+                <TableColumn fx:id="tbcPrecioMO" prefWidth="82.0" text="Precio MO" />
+                <TableColumn fx:id="tbcEstado" prefWidth="125.0" text="Estado" />
+                <TableColumn fx:id="tbcOrden" prefWidth="86.0" text="Orden" />
+                <TableColumn fx:id="tbcRepuestos" prefWidth="96.0" text="Repuestos" />
+            <TableColumn fx:id="tbcPrecioR" prefWidth="134.0" text="Precio Repuestos" />
+            </columns>
+        </TableView>
+        <Button fx:id="bttAgregarServicio" layoutX="596.0" layoutY="224.0" mnemonicParsing="false" onAction="#AgregarServicio" prefHeight="25.0" prefWidth="62.0" text="Agregar" />
+        <Button fx:id="bttEliminarServicio" layoutX="596.0" layoutY="269.0" mnemonicParsing="false" onAction="#EliminarServicio" prefHeight="25.0" prefWidth="62.0" text="Eliminar" />
+        <Button fx:id="bttModificarServicio" layoutX="591.0" layoutY="311.0" mnemonicParsing="false" onAction="#ModificarServicio" prefHeight="25.0" prefWidth="72.0" text="Modificar" />
+        <Button fx:id="bttLimpiarServicio" layoutX="591.0" layoutY="351.0" mnemonicParsing="false" onAction="#LimpiarServicio" prefHeight="25.0" prefWidth="72.0" text="Limpiar" />
+        <Button fx:id="bttVolver" mnemonicParsing="false" onAction="#Volver" text="Volver" />
+      <TableView fx:id="tbOrden" layoutX="46.0" layoutY="120.0" prefHeight="70.0" prefWidth="216.0">
+        <columns>
+          <TableColumn fx:id="tbIDOrden" prefWidth="215.0" text="Orden" />
+        </columns>
+      </TableView>
+      <TableView fx:id="tbRepuestos" layoutX="277.0" layoutY="85.0" prefHeight="105.0" prefWidth="216.0">
+         <columns>
+            <TableColumn fx:id="tbNombreRepuestos" prefWidth="215.0" text="Repuestos" />
+         </columns>
+      </TableView>
+      <TextArea fx:id="txtDescripcion" layoutX="510.0" layoutY="79.0" prefHeight="111.0" prefWidth="155.0" />
+    </children>
+</Pane>
