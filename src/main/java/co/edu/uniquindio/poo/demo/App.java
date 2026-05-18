@@ -252,7 +252,7 @@ public class App extends Application {
             e.printStackTrace();
         }
 
-        s
+
     }
 
     public void inicializarData() {
