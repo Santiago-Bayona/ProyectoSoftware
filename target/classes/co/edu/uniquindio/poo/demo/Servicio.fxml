@@ -14,51 +14,76 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="647.0" prefWidth="867.0" style="-fx-background-color: #F5F5F5;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.poo.demo.VC.ServicioVC">
+<AnchorPane prefHeight="720.0" prefWidth="870.0"
+            style="-fx-background-color: #F5F5F5;"
+            xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="co.edu.uniquindio.poo.demo.VC.ServicioVC">
     <children>
-        <VBox layoutX="2.0" prefHeight="647.0" prefWidth="867.0" spacing="16" style="-fx-background-color: white; -fx-background-radius: 8; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 8, 0, 0, 2);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="-2.0" AnchorPane.topAnchor="0.0">
-            <padding><Insets bottom="24" left="24" right="24" top="24" /></padding>
-             <MFXButton fx:id="bttVolver" onAction="#Volver" style="-fx-background-color: #E0E0E0; -fx-text-fill: #424242; -fx-background-radius: 4;" text="← Volver" />
+        <VBox AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0"
+              AnchorPane.rightAnchor="0" AnchorPane.bottomAnchor="0"
+              spacing="16"
+              style="-fx-background-color: white; -fx-background-radius: 8; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 8, 0, 0, 2);">
+            <padding><Insets top="24" right="24" bottom="24" left="24"/></padding>
 
-            <Label style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #1565C0;" text="Gestión de Servicios" />
+            <MFXButton fx:id="bttVolver" text="← Volver" onAction="#Volver"
+                       style="-fx-background-color: #E0E0E0; -fx-text-fill: #424242; -fx-background-radius: 4;"/>
+
+            <Label text="Gestión de Servicios"
+                   style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #1565C0;"/>
 
             <GridPane hgap="16" vgap="4">
                 <columnConstraints>
-                    <ColumnConstraints hgrow="ALWAYS" percentWidth="33" />
-                    <ColumnConstraints hgrow="ALWAYS" percentWidth="33" />
-                    <ColumnConstraints hgrow="ALWAYS" percentWidth="34" />
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="33"/>
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="33"/>
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="34"/>
                 </columnConstraints>
                 <rowConstraints>
-                    <RowConstraints />
-                    <RowConstraints />
+                    <RowConstraints/>
+                    <RowConstraints/>
                 </rowConstraints>
 
-                <MFXTextField fx:id="txtID" floatingText="ID de Servicio" maxWidth="Infinity" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                <MFXTextField fx:id="txtPrecioMO" floatingText="Precio Mano de Obra" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                <MFXComboBox fx:id="cbxEstado" floatingText="Estado" maxWidth="Infinity" GridPane.columnIndex="2" GridPane.rowIndex="0" />
-                <TextArea fx:id="txtDescripcion" maxWidth="Infinity" prefHeight="70" promptText="Descripción del servicio..." style="-fx-font-size: 13px;" GridPane.columnIndex="0" GridPane.columnSpan="3" GridPane.rowIndex="1" />
+                <MFXTextField fx:id="txtID" floatingText="ID de Servicio"
+                              GridPane.columnIndex="0" GridPane.rowIndex="0" maxWidth="Infinity"/>
+                <MFXTextField fx:id="txtPrecioMO" floatingText="Precio Mano de Obra"
+                              GridPane.columnIndex="1" GridPane.rowIndex="0" maxWidth="Infinity"/>
+                <MFXComboBox fx:id="cbxEstado" floatingText="Estado"
+                             GridPane.columnIndex="2" GridPane.rowIndex="0" maxWidth="Infinity"/>
+                <TextArea fx:id="txtDescripcion" promptText="Descripción del servicio..."
+                          GridPane.columnIndex="0" GridPane.rowIndex="1"
+                          GridPane.columnSpan="3"
+                          prefHeight="65" maxWidth="Infinity"
+                          style="-fx-font-size: 13px;"/>
             </GridPane>
 
-            <!-- Tablas de selección -->
-            <HBox spacing="16">
+            <!-- Tablas de selección con más altura -->
+            <HBox spacing="16" VBox.vgrow="ALWAYS">
                 <VBox spacing="4" HBox.hgrow="ALWAYS">
-                    <Label style="-fx-font-size: 13px; -fx-text-fill: #555;" text="Seleccionar Orden" />
-                    <MFXTableView fx:id="tbOrden" maxHeight="130.0" prefHeight="130.0" />
+                    <Label text="Seleccionar Orden" style="-fx-font-size: 13px; -fx-text-fill: #555;"/>
+                    <MFXTableView fx:id="tbOrden"
+                                  prefHeight="180.0" minHeight="140.0"
+                                  maxHeight="Infinity" VBox.vgrow="ALWAYS"/>
                 </VBox>
                 <VBox spacing="4" HBox.hgrow="ALWAYS">
-                    <Label style="-fx-font-size: 13px; -fx-text-fill: #555;" text="Seleccionar Repuestos (Ctrl+Click)" />
-                    <MFXTableView fx:id="tbRepuestos" maxHeight="130.0" prefHeight="130.0" />
+                    <Label text="Seleccionar Repuestos (Ctrl+Click)" style="-fx-font-size: 13px; -fx-text-fill: #555;"/>
+                    <MFXTableView fx:id="tbRepuestos"
+                                  prefHeight="180.0" minHeight="140.0"
+                                  maxHeight="Infinity" VBox.vgrow="ALWAYS"/>
                 </VBox>
             </HBox>
 
-            <HBox alignment="CENTER_RIGHT" spacing="10">
-                <MFXButton fx:id="bttLimpiarServicio" onAction="#LimpiarServicio" style="-fx-background-color: #E0E0E0; -fx-text-fill: #424242; -fx-background-radius: 4;" text="Limpiar" />
-                <MFXButton fx:id="bttEliminarServicio" onAction="#EliminarServicio" style="-fx-background-color: #EF5350; -fx-text-fill: white; -fx-background-radius: 4;" text="Eliminar" />
-                <MFXButton fx:id="bttModificarServicio" onAction="#ModificarServicio" style="-fx-background-color: #FB8C00; -fx-text-fill: white; -fx-background-radius: 4;" text="Modificar" />
-                <MFXButton fx:id="bttAgregarServicio" onAction="#AgregarServicio" style="-fx-background-color: #1565C0; -fx-text-fill: white; -fx-background-radius: 4;" text="Agregar" />
+            <HBox spacing="10" alignment="CENTER_RIGHT">
+                <MFXButton fx:id="bttLimpiarServicio" text="Limpiar" onAction="#LimpiarServicio"
+                           style="-fx-background-color: #E0E0E0; -fx-text-fill: #424242; -fx-background-radius: 4;"/>
+                <MFXButton fx:id="bttEliminarServicio" text="Eliminar" onAction="#EliminarServicio"
+                           style="-fx-background-color: #EF5350; -fx-text-fill: white; -fx-background-radius: 4;"/>
+                <MFXButton fx:id="bttModificarServicio" text="Modificar" onAction="#ModificarServicio"
+                           style="-fx-background-color: #FB8C00; -fx-text-fill: white; -fx-background-radius: 4;"/>
+                <MFXButton fx:id="bttAgregarServicio" text="Agregar" onAction="#AgregarServicio"
+                           style="-fx-background-color: #1565C0; -fx-text-fill: white; -fx-background-radius: 4;"/>
             </HBox>
 
-            <MFXTableView fx:id="tbServicio" maxHeight="Infinity" VBox.vgrow="ALWAYS" />
+            <MFXTableView fx:id="tbServicio" VBox.vgrow="ALWAYS" maxHeight="Infinity" prefHeight="180.0"/>
         </VBox>
     </children>
 </AnchorPane>

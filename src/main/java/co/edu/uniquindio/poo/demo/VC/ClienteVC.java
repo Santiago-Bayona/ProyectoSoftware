@@ -59,7 +59,13 @@ public class ClienteVC {
 
     @FXML
     void Volver(ActionEvent event) {
-        try { app.MenuAdmin(); } catch (Exception e) { e.printStackTrace(); }
+        try { if (app.esAdmin()) {
+            app.MenuAdmin();
+        } else {
+            app.MenuEmpleado();
+        }
+        } catch (Exception e) {
+            e.printStackTrace(); }
     }
 
     // ─── Inicialización ──────────────────────────────────────────────────────────

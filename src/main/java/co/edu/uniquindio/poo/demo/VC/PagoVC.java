@@ -51,8 +51,15 @@ public class PagoVC {
     @FXML void EliminarPago(ActionEvent event) { eliminarPago(); }
     @FXML void LimpiarPago(ActionEvent event)  { limpiarCampos(); }
     @FXML void ModificarPago(ActionEvent event){ actualizarPago(); }
-    @FXML void Volver(ActionEvent event) {
-        try { app.MenuAdmin(); } catch (Exception e) { e.printStackTrace(); }
+    @FXML
+    void Volver(ActionEvent event) {
+        try { if (app.esAdmin()) {
+            app.MenuAdmin();
+        } else {
+            app.MenuEmpleado();
+        }
+        } catch (Exception e) {
+            e.printStackTrace(); }
     }
 
     @FXML
@@ -117,6 +124,7 @@ public class PagoVC {
         Pago p = buildPago();
         if (pagocontroller.crearpago(p)) {
             listaPago.add(p);
+            refrescarTabla();
             limpiarCampos();
         }
     }
@@ -124,6 +132,7 @@ public class PagoVC {
     private void eliminarPago() {
         if (selectedPago != null && pagocontroller.eliminarpago(selectedPago)) {
             listaPago.remove(selectedPago);
+            refrescarTabla();
             limpiarCampos();
             limpiarSeleccion();
         }
@@ -135,6 +144,7 @@ public class PagoVC {
             int index = listaPago.indexOf(selectedPago);
             if (index >= 0) listaPago.set(index, buildPago());
             tbPago.update();
+            refrescarTabla();
             limpiarSeleccion();
             limpiarCampos();
         }
@@ -147,6 +157,10 @@ public class PagoVC {
     private void limpiarSeleccion() {
         tbPago.getSelectionModel().clearSelection();
         limpiarCampos();
+    }
+    private void refrescarTabla() {
+        tbPago.setItems(null);
+        tbPago.setItems(listaPago);
     }
 
     private void limpiarCampos() {

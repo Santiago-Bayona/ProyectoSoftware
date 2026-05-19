@@ -53,8 +53,15 @@ public class MecanicoVC {
     @FXML void EliminarMecanico(ActionEvent event) { eliminarMecanico(); }
     @FXML void LimpiarMecanico(ActionEvent event)  { limpiarCampos(); }
     @FXML void ModificarMecanico(ActionEvent event){ actualizarMecanico(); }
-    @FXML void Volver(ActionEvent event) {
-        try { app.MenuAdmin(); } catch (Exception e) { e.printStackTrace(); }
+    @FXML
+    void Volver(ActionEvent event) {
+        try { if (app.esAdmin()) {
+            app.MenuAdmin();
+        } else {
+            app.MenuEmpleado();
+        }
+        } catch (Exception e) {
+            e.printStackTrace(); }
     }
 
     @FXML

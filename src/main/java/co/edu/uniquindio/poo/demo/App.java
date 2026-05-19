@@ -17,6 +17,7 @@ public class App extends Application {
 
     public static Taller taller = new Taller("tallersito", "Uniquindio");
     private Stage primaryStage;
+    private boolean adminSession = false;
 
     @Override
     public void start(Stage primaryStage) throws IOException {
@@ -101,6 +102,7 @@ public class App extends Application {
     }
 
     public void MenuAdmin() {
+        adminSession = true;
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(App.class.getResource("hello-view.fxml"));
@@ -209,6 +211,7 @@ public class App extends Application {
     }
 
     public void MenuEmpleado() {
+        adminSession = false;
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(App.class.getResource("MenuEmpleado.fxml"));
@@ -345,6 +348,10 @@ public class App extends Application {
         }
 
 
+    }
+
+    public boolean esAdmin() {
+        return adminSession;
     }
 
     public void inicializarData() {

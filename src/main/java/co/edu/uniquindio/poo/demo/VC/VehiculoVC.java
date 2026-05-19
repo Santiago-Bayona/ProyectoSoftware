@@ -54,8 +54,15 @@ public class VehiculoVC {
     @FXML void EliminarVehiculo(ActionEvent event) { eliminarvehiculo(); }
     @FXML void LimpiarVehiculo(ActionEvent event)  { limpiarCampos(); }
     @FXML void ModificarVehiculo(ActionEvent event){ modificarVehiculo(); }
-    @FXML void Volver(ActionEvent event) {
-        try { app.MenuAdmin(); } catch (Exception e) { e.printStackTrace(); }
+    @FXML
+    void Volver(ActionEvent event) {
+        try { if (app.esAdmin()) {
+            app.MenuAdmin();
+        } else {
+            app.MenuEmpleado();
+        }
+        } catch (Exception e) {
+            e.printStackTrace(); }
     }
 
     @FXML

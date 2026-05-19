@@ -30,9 +30,9 @@ public class ServicioVC {
 
     App app;
     ServicioController servicioController;
-    private ObservableList<Servicio>  listaServicio  = FXCollections.observableArrayList();
-    private ObservableList<Orden>     listaOrden     = FXCollections.observableArrayList();
-    private ObservableList<Repuesto>  listaRepuestos = FXCollections.observableArrayList();
+    private ObservableList<Servicio> listaServicio  = FXCollections.observableArrayList();
+    private ObservableList<Orden>    listaOrden     = FXCollections.observableArrayList();
+    private ObservableList<Repuesto> listaRepuestos = FXCollections.observableArrayList();
     private Servicio selectedServicio;
     private Orden    selectedOrden;
 
@@ -50,38 +50,41 @@ public class ServicioVC {
     @FXML private MFXTextField txtPrecioMO;
     @FXML private TextArea     txtDescripcion;
 
-    @FXML private MFXTableView<Servicio>  tbServicio;
-    @FXML private MFXTableView<Orden>     tbOrden;
-    @FXML private MFXTableView<Repuesto>  tbRepuestos;
+    @FXML private MFXTableView<Servicio> tbServicio;
+    @FXML private MFXTableView<Orden>    tbOrden;
+    @FXML private MFXTableView<Repuesto> tbRepuestos;
 
     @FXML void AgregarServicio(ActionEvent event)  { agregarServicio(); }
     @FXML void EliminarServicio(ActionEvent event) { eliminarServicio(); }
     @FXML void LimpiarServicio(ActionEvent event)  { limpiarCampos(); }
     @FXML void ModificarServicio(ActionEvent event){ modificarServicio(); }
-    @FXML void Volver(ActionEvent event) {
-        try { app.MenuAdmin(); } catch (Exception e) { e.printStackTrace(); }
+
+    @FXML
+    void Volver(ActionEvent event) {
+        try { if (app.esAdmin()) {
+            app.MenuAdmin();
+        } else {
+            app.MenuEmpleado();
+        }
+        } catch (Exception e) {
+            e.printStackTrace(); }
     }
 
     @FXML
     void initialize() {
         if (App.taller == null) { System.err.println("Taller null"); return; }
         servicioController = new ServicioController(App.taller);
-
         obtenerOrdenes();
         obtenerRepuestos();
         obtenerServicios();
-
         setupColumnasServicio();
         setupColumnasOrden();
         setupColumnasRepuestos();
         setupFiltros();
-
         tbServicio .setItems(listaServicio);
         tbOrden    .setItems(listaOrden);
         tbRepuestos.setItems(listaRepuestos);
-
         tbRepuestos.getSelectionModel().setAllowsMultipleSelection(true);
-
         listenerSelectionServicio();
         listenerSelectionOrden();
     }
@@ -101,7 +104,7 @@ public class ServicioVC {
         colEstado .setRowCellFactory(s -> new MFXTableRowCell<>(sv -> sv.getEstadoServicio() != null ? sv.getEstadoServicio().toString() : ""));
         colOrden  .setRowCellFactory(s -> new MFXTableRowCell<>(sv -> sv.getOrden().getIdOrden()));
         colReps   .setRowCellFactory(s -> new MFXTableRowCell<>(Servicio::getNombresRepuestos));
-        colPrecioR.setRowCellFactory(s -> new MFXTableRowCell<>(sv -> String.valueOf(sv.calcularPrecioRepuestos())));
+        colPrecioR.setRowCellFactory(s -> new MFXTableRowCell<>(sv -> String.valueOf(sv.getPrecioRepuestos())));
 
         colID     .setPrefWidth(70);
         colMO     .setPrefWidth(90);
@@ -114,21 +117,24 @@ public class ServicioVC {
     }
 
     private void setupColumnasOrden() {
-        MFXTableColumn<Orden> colID    = new MFXTableColumn<>("ID Orden",  true, Comparator.comparing(Orden::getIdOrden));
-        MFXTableColumn<Orden> colPlaca = new MFXTableColumn<>("Vehículo",  true, Comparator.comparing(o -> o.getVehiculo().getPlaca()));
+        MFXTableColumn<Orden> colID    = new MFXTableColumn<>("ID Orden", true, Comparator.comparing(Orden::getIdOrden));
+        MFXTableColumn<Orden> colPlaca = new MFXTableColumn<>("Vehículo", true, Comparator.comparing(o -> o.getVehiculo().getPlaca()));
+        MFXTableColumn<Orden> colCliente = new MFXTableColumn<>("Cliente", true, Comparator.comparing(o -> o.getCliente().getNombre()));
 
-        colID   .setRowCellFactory(o -> new MFXTableRowCell<>(Orden::getIdOrden));
-        colPlaca.setRowCellFactory(o -> new MFXTableRowCell<>(or -> or.getVehiculo().getPlaca()));
+        colID    .setRowCellFactory(o -> new MFXTableRowCell<>(Orden::getIdOrden));
+        colPlaca .setRowCellFactory(o -> new MFXTableRowCell<>(or -> or.getVehiculo().getPlaca()));
+        colCliente.setRowCellFactory(o -> new MFXTableRowCell<>(or -> or.getCliente().getNombre()));
 
-        colID   .setPrefWidth(120);
-        colPlaca.setPrefWidth(120);
+        colID    .setPrefWidth(100);
+        colPlaca .setPrefWidth(100);
+        colCliente.setPrefWidth(120);
 
-        tbOrden.getTableColumns().addAll(colID, colPlaca);
+        tbOrden.getTableColumns().addAll(colID, colPlaca, colCliente);
     }
 
     private void setupColumnasRepuestos() {
-        MFXTableColumn<Repuesto> colNom    = new MFXTableColumn<>("Nombre", true, Comparator.comparing(Repuesto::getNombre));
-        MFXTableColumn<Repuesto> colStock  = new MFXTableColumn<>("Stock",  true, Comparator.comparingInt(Repuesto::getStock));
+        MFXTableColumn<Repuesto> colNom   = new MFXTableColumn<>("Nombre", true, Comparator.comparing(Repuesto::getNombre));
+        MFXTableColumn<Repuesto> colStock = new MFXTableColumn<>("Stock",  true, Comparator.comparingInt(Repuesto::getStock));
 
         colNom  .setRowCellFactory(r -> new MFXTableRowCell<>(Repuesto::getNombre));
         colStock.setRowCellFactory(r -> new MFXTableRowCell<>(re -> String.valueOf(re.getStock())));
@@ -140,12 +146,8 @@ public class ServicioVC {
     }
 
     private void setupFiltros() {
-        tbServicio.getFilters().addAll(
-                new StringFilter<>("ID", Servicio::getIdServicio)
-        );
+        tbServicio.getFilters().addAll(new StringFilter<>("ID", Servicio::getIdServicio));
     }
-
-    // ─── Listeners ───────────────────────────────────────────────────────────────
 
     private void listenerSelectionServicio() {
         tbServicio.getSelectionModel().selectionProperty().addListener((obs, oldVal, newVal) -> {
@@ -163,8 +165,6 @@ public class ServicioVC {
         });
     }
 
-    // ─── Carga de datos ──────────────────────────────────────────────────────────
-
     private void obtenerServicios() {
         Collection<Servicio> svs = servicioController.obtenerListaServicio();
         if (svs != null) listaServicio.setAll(svs);
@@ -180,15 +180,12 @@ public class ServicioVC {
         if (reps != null) listaRepuestos.setAll(reps);
     }
 
-    // ─── Mostrar información ─────────────────────────────────────────────────────
-
     private void mostrarInformacionServicio(Servicio s) {
         if (s == null) return;
         txtID         .setText(s.getIdServicio());
         txtPrecioMO   .setText(String.valueOf(s.getPrecioManoObra()));
         txtDescripcion.setText(s.getDescripcion());
         cbxEstado.setValue(s.getEstadoServicio());
-
         tbRepuestos.getSelectionModel().clearSelection();
         for (Repuesto r : s.getRepuestos()) {
             int index = listaRepuestos.indexOf(r);
@@ -200,14 +197,15 @@ public class ServicioVC {
 
     private void agregarServicio() {
         if (selectedOrden == null || txtID.getText().isEmpty() || cbxEstado.getValue() == null) {
-            System.err.println("Datos incompletos.");
-            return;
+            System.err.println("Datos incompletos."); return;
         }
         Servicio s = buildServicio();
         if (s != null) {
+            s.calcularPrecioRepuestos();
             s.descontarStockRepuestos();
             if (servicioController.crearServicio(s)) {
                 listaServicio.add(s);
+                refrescarTabla();
                 limpiarCampos();
             }
         }
@@ -216,7 +214,7 @@ public class ServicioVC {
     private void eliminarServicio() {
         if (selectedServicio != null && servicioController.eliminarServicio(selectedServicio)) {
             listaServicio.remove(selectedServicio);
-            limpiarCampos();
+            refrescarTabla();
             limpiarSeleccion();
         }
     }
@@ -226,29 +224,30 @@ public class ServicioVC {
         Servicio actualizado = buildServicio();
         if (actualizado != null && servicioController.actualizarServicio(selectedServicio.getIdServicio(), actualizado)) {
             App.taller.finalizaServicio();
+            actualizado.calcularPrecioRepuestos();
             actualizado.descontarStockRepuestos();
             int index = listaServicio.indexOf(selectedServicio);
             if (index >= 0) listaServicio.set(index, actualizado);
-            tbServicio.update();
+            refrescarTabla();
             limpiarSeleccion();
             limpiarCampos();
         }
     }
 
+    private void refrescarTabla() {
+        tbServicio.setItems(null);
+        tbServicio.setItems(listaServicio);
+    }
+
     private Servicio buildServicio() {
         if (selectedOrden == null || txtID.getText().isEmpty() || cbxEstado.getValue() == null) return null;
-
         Servicio s = new Servicio(
-                txtID.getText(),
-                txtDescripcion.getText(),
+                txtID.getText(), txtDescripcion.getText(),
                 Double.parseDouble(txtPrecioMO.getText()),
-                cbxEstado.getValue(),
-                selectedOrden
+                cbxEstado.getValue(), selectedOrden
         );
-
-        List<Repuesto> seleccionados = List.copyOf(tbRepuestos.getSelectionModel().getSelectedValues());
-        for (Repuesto r : seleccionados) s.agregarRepuesto(r);
-
+        for (Repuesto r : List.copyOf(tbRepuestos.getSelectionModel().getSelectedValues()))
+            s.agregarRepuesto(r);
         return s;
     }
 

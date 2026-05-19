@@ -48,8 +48,15 @@ public class RepuestoVC {
     @FXML void EliminarRepuesto(ActionEvent event) { eliminarRepuesto(); }
     @FXML void LimpiarRepuesto(ActionEvent event)  { limpiarCampos(); }
     @FXML void ModificarRepuesto(ActionEvent event){ actualizarRepuesto(); }
-    @FXML void Volver(ActionEvent event) {
-        try { app.MenuAdmin(); } catch (Exception e) { e.printStackTrace(); }
+    @FXML
+    void Volver(ActionEvent event) {
+        try { if (app.esAdmin()) {
+            app.MenuAdmin();
+        } else {
+            app.MenuEmpleado();
+        }
+        } catch (Exception e) {
+            e.printStackTrace(); }
     }
 
     @FXML

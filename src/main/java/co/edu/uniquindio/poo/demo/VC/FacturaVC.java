@@ -52,28 +52,32 @@ public class FacturaVC {
     @FXML void EliminarFactura(ActionEvent event) { eliminarFactura(); }
     @FXML void LimpiarFactura(ActionEvent event)  { limpiarCampos(); }
     @FXML void ModificarFactura(ActionEvent event){ actualizarFactura(); }
-    @FXML void Volver(ActionEvent event) {
-        try { app.MenuAdmin(); } catch (Exception e) { e.printStackTrace(); }
+
+    @FXML
+    void Volver(ActionEvent event) {
+        try { if (app.esAdmin()) {
+            app.MenuAdmin();
+        } else {
+            app.MenuEmpleado();
+        }
+        } catch (Exception e) {
+            e.printStackTrace(); }
     }
 
     @FXML
     void initialize() {
         if (App.taller == null) { System.err.println("Taller null"); return; }
         facturaController = new FacturaController(App.taller);
-
         obtenerPagos();
         obtenerServicios();
         obtenerFacturas();
-
         setupColumnasFactura();
         setupColumnasPago();
         setupColumnasServicio();
         setupFiltros();
-
         tbFactura .setItems(listaFacturas);
         tbPago    .setItems(listaPagos);
         tbServicio.setItems(listaServicio);
-
         listenerSelectionFactura();
         listenerSelectionPago();
         listenerSelectionServicio();
@@ -82,10 +86,10 @@ public class FacturaVC {
     // ─── Columnas ────────────────────────────────────────────────────────────────
 
     private void setupColumnasFactura() {
-        MFXTableColumn<Factura> colID      = new MFXTableColumn<>("ID",       true, Comparator.comparing(Factura::getIdFactura));
-        MFXTableColumn<Factura> colPago    = new MFXTableColumn<>("Pago",     true, Comparator.comparing(f -> f.getPago().getIdPago()));
-        MFXTableColumn<Factura> colServ    = new MFXTableColumn<>("Servicio", true, Comparator.comparing(f -> f.getServicio().getIdServicio()));
-        MFXTableColumn<Factura> colTotal   = new MFXTableColumn<>("Total",    true, Comparator.comparingDouble(Factura::getTotal));
+        MFXTableColumn<Factura> colID    = new MFXTableColumn<>("ID",       true, Comparator.comparing(Factura::getIdFactura));
+        MFXTableColumn<Factura> colPago  = new MFXTableColumn<>("Pago",     true, Comparator.comparing(f -> f.getPago().getIdPago()));
+        MFXTableColumn<Factura> colServ  = new MFXTableColumn<>("Servicio", true, Comparator.comparing(f -> f.getServicio().getIdServicio()));
+        MFXTableColumn<Factura> colTotal = new MFXTableColumn<>("Total",    true, Comparator.comparingDouble(Factura::getTotal));
 
         colID   .setRowCellFactory(f -> new MFXTableRowCell<>(Factura::getIdFactura));
         colPago .setRowCellFactory(f -> new MFXTableRowCell<>(fa -> fa.getPago() != null ? fa.getPago().getIdPago() : ""));
@@ -95,41 +99,45 @@ public class FacturaVC {
         colID   .setPrefWidth(100);
         colPago .setPrefWidth(120);
         colServ .setPrefWidth(120);
-        colTotal.setPrefWidth(120);
+        colTotal.setPrefWidth(130);
 
         tbFactura.getTableColumns().addAll(colID, colPago, colServ, colTotal);
     }
 
     private void setupColumnasPago() {
         MFXTableColumn<Pago> colID     = new MFXTableColumn<>("ID Pago", true, Comparator.comparing(Pago::getIdPago));
+        MFXTableColumn<Pago> colMetodo = new MFXTableColumn<>("Método",  true, Comparator.comparing(p -> p.getMetodo().toString()));
         MFXTableColumn<Pago> colEstado = new MFXTableColumn<>("Estado",  true, Comparator.comparing(p -> p.getEstado().toString()));
 
         colID    .setRowCellFactory(p -> new MFXTableRowCell<>(Pago::getIdPago));
+        colMetodo.setRowCellFactory(p -> new MFXTableRowCell<>(pa -> pa.getMetodo() != null ? pa.getMetodo().toString() : ""));
         colEstado.setRowCellFactory(p -> new MFXTableRowCell<>(pa -> pa.getEstado() != null ? pa.getEstado().toString() : ""));
 
-        colID    .setPrefWidth(150);
+        colID    .setPrefWidth(120);
+        colMetodo.setPrefWidth(100);
         colEstado.setPrefWidth(100);
 
-        tbPago.getTableColumns().addAll(colID, colEstado);
+        tbPago.getTableColumns().addAll(colID, colMetodo, colEstado);
     }
 
     private void setupColumnasServicio() {
         MFXTableColumn<Servicio> colID    = new MFXTableColumn<>("ID Servicio", true, Comparator.comparing(Servicio::getIdServicio));
         MFXTableColumn<Servicio> colOrden = new MFXTableColumn<>("Orden",       true, Comparator.comparing(s -> s.getOrden().getIdOrden()));
+        MFXTableColumn<Servicio> colEstado= new MFXTableColumn<>("Estado",      true, Comparator.comparing(s -> s.getEstadoServicio().toString()));
 
-        colID   .setRowCellFactory(s -> new MFXTableRowCell<>(Servicio::getIdServicio));
-        colOrden.setRowCellFactory(s -> new MFXTableRowCell<>(sv -> sv.getOrden().getIdOrden()));
+        colID    .setRowCellFactory(s -> new MFXTableRowCell<>(Servicio::getIdServicio));
+        colOrden .setRowCellFactory(s -> new MFXTableRowCell<>(sv -> sv.getOrden().getIdOrden()));
+        colEstado.setRowCellFactory(s -> new MFXTableRowCell<>(sv -> sv.getEstadoServicio().toString()));
 
-        colID   .setPrefWidth(150);
-        colOrden.setPrefWidth(100);
+        colID    .setPrefWidth(130);
+        colOrden .setPrefWidth(100);
+        colEstado.setPrefWidth(100);
 
-        tbServicio.getTableColumns().addAll(colID, colOrden);
+        tbServicio.getTableColumns().addAll(colID, colOrden, colEstado);
     }
 
     private void setupFiltros() {
-        tbFactura.getFilters().addAll(
-                new StringFilter<>("ID", Factura::getIdFactura)
-        );
+        tbFactura.getFilters().addAll(new StringFilter<>("ID", Factura::getIdFactura));
     }
 
     // ─── Listeners ───────────────────────────────────────────────────────────────
@@ -155,7 +163,7 @@ public class FacturaVC {
         });
     }
 
-    // ─── Carga de datos ──────────────────────────────────────────────────────────
+    // ─── Datos ───────────────────────────────────────────────────────────────────
 
     private void obtenerFacturas() {
         Collection<Factura> fs = facturaController.obtenerListafactura();
@@ -172,8 +180,6 @@ public class FacturaVC {
         if (ss != null) listaServicio.setAll(ss);
     }
 
-    // ─── Mostrar información ─────────────────────────────────────────────────────
-
     private void mostrarInformacionFactura(Factura f) {
         if (f == null) return;
         txtID.setText(f.getIdFactura());
@@ -185,6 +191,7 @@ public class FacturaVC {
         Factura f = buildFactura();
         if (facturaController.crearfactura(f)) {
             listaFacturas.add(f);
+            refrescarTabla();
             limpiarCampos();
         }
     }
@@ -192,7 +199,7 @@ public class FacturaVC {
     private void eliminarFactura() {
         if (selectedFactura != null && facturaController.eliminarfactura(selectedFactura)) {
             listaFacturas.remove(selectedFactura);
-            limpiarCampos();
+            refrescarTabla();
             limpiarSeleccion();
         }
     }
@@ -202,10 +209,15 @@ public class FacturaVC {
                 facturaController.actualizarfactura(selectedFactura.getIdFactura(), buildFactura())) {
             int index = listaFacturas.indexOf(selectedFactura);
             if (index >= 0) listaFacturas.set(index, buildFactura());
-            tbFactura.update();
+            refrescarTabla();
             limpiarSeleccion();
             limpiarCampos();
         }
+    }
+
+    private void refrescarTabla() {
+        tbFactura.setItems(null);
+        tbFactura.setItems(listaFacturas);
     }
 
     private Factura buildFactura() {

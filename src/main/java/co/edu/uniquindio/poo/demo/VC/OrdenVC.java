@@ -47,8 +47,8 @@ public class OrdenVC {
     @FXML private MFXButton bttModificarOrden;
     @FXML private MFXButton bttVolver;
 
-    @FXML private MFXDatePicker        dpFecha;
-    @FXML private MFXTextField         txtID;
+    @FXML private MFXDatePicker          dpFecha;
+    @FXML private MFXTextField           txtID;
     @FXML private MFXTableView<Orden>    tbOrden;
     @FXML private MFXTableView<Vehiculo> tbVehiculo;
     @FXML private MFXTableView<Mecanico> tbMecanico;
@@ -57,36 +57,36 @@ public class OrdenVC {
     @FXML void EliminarOrden(ActionEvent event) { eliminarorden(); }
     @FXML void LimpiarOrden(ActionEvent event)  { limpiarCampos(); }
     @FXML void ModificarOrden(ActionEvent event){ modificarOrden(); }
-    @FXML void Volver(ActionEvent event) {
-        try { app.MenuAdmin(); } catch (Exception e) { e.printStackTrace(); }
+
+    @FXML
+    void Volver(ActionEvent event) {
+        try { if (app.esAdmin()) {
+            app.MenuAdmin();
+        } else {
+            app.MenuEmpleado();
+        }
+        } catch (Exception e) {
+            e.printStackTrace(); }
     }
 
     @FXML
     void initialize() {
         if (App.taller == null) { System.err.println("Taller null"); return; }
         ordenController = new OrdenController(App.taller);
-
         obtenerVehiculos();
         obtenerMecanicos();
         obtenerOrdenes();
-
         setupColumnasOrden();
         setupColumnasVehiculo();
         setupColumnasMecanico();
         setupFiltros();
-
         tbOrden   .setItems(listaOrden);
         tbVehiculo.setItems(listaVehiculo);
         tbMecanico.setItems(listaMecanicos);
-
-        // MFXTableView soporta multiselección configurando el selection model
         tbMecanico.getSelectionModel().setAllowsMultipleSelection(true);
-
         listenerSelectionOrden();
         listenerSelectionVehiculo();
     }
-
-    // ─── Columnas ────────────────────────────────────────────────────────────────
 
     private void setupColumnasOrden() {
         MFXTableColumn<Orden> colID       = new MFXTableColumn<>("ID",        true, Comparator.comparing(Orden::getIdOrden));
@@ -103,46 +103,45 @@ public class OrdenVC {
 
         colID      .setPrefWidth(80);
         colFecha   .setPrefWidth(100);
-        colCliente .setPrefWidth(120);
+        colCliente .setPrefWidth(130);
         colVehiculo.setPrefWidth(100);
-        colMecs    .setPrefWidth(200);
+        colMecs    .setPrefWidth(220);
 
         tbOrden.getTableColumns().addAll(colID, colFecha, colCliente, colVehiculo, colMecs);
     }
 
     private void setupColumnasVehiculo() {
-        MFXTableColumn<Vehiculo> colPlaca = new MFXTableColumn<>("Placa", true, Comparator.comparing(Vehiculo::getPlaca));
-        MFXTableColumn<Vehiculo> colMarca = new MFXTableColumn<>("Marca", true, Comparator.comparing(Vehiculo::getMarca));
+        MFXTableColumn<Vehiculo> colPlaca  = new MFXTableColumn<>("Placa",  true, Comparator.comparing(Vehiculo::getPlaca));
+        MFXTableColumn<Vehiculo> colMarca  = new MFXTableColumn<>("Marca",  true, Comparator.comparing(Vehiculo::getMarca));
+        MFXTableColumn<Vehiculo> colDuenio = new MFXTableColumn<>("Dueño",  true, Comparator.comparing(v -> v.getDuenio().getNombre()));
 
-        colPlaca.setRowCellFactory(v -> new MFXTableRowCell<>(Vehiculo::getPlaca));
-        colMarca.setRowCellFactory(v -> new MFXTableRowCell<>(Vehiculo::getMarca));
+        colPlaca .setRowCellFactory(v -> new MFXTableRowCell<>(Vehiculo::getPlaca));
+        colMarca .setRowCellFactory(v -> new MFXTableRowCell<>(Vehiculo::getMarca));
+        colDuenio.setRowCellFactory(v -> new MFXTableRowCell<>(ve -> ve.getDuenio().getNombre()));
 
-        colPlaca.setPrefWidth(150);
-        colMarca.setPrefWidth(150);
+        colPlaca .setPrefWidth(100);
+        colMarca .setPrefWidth(100);
+        colDuenio.setPrefWidth(130);
 
-        tbVehiculo.getTableColumns().addAll(colPlaca, colMarca);
+        tbVehiculo.getTableColumns().addAll(colPlaca, colMarca, colDuenio);
     }
 
     private void setupColumnasMecanico() {
-        MFXTableColumn<Mecanico> colNom = new MFXTableColumn<>("Nombre",      true, Comparator.comparing(Mecanico::getNombre));
-        MFXTableColumn<Mecanico> colEsp = new MFXTableColumn<>("Especialidad",true, Comparator.comparing(Mecanico::getEspcialidad));
+        MFXTableColumn<Mecanico> colNom = new MFXTableColumn<>("Nombre",       true, Comparator.comparing(Mecanico::getNombre));
+        MFXTableColumn<Mecanico> colEsp = new MFXTableColumn<>("Especialidad", true, Comparator.comparing(Mecanico::getEspcialidad));
 
         colNom.setRowCellFactory(m -> new MFXTableRowCell<>(Mecanico::getNombre));
         colEsp.setRowCellFactory(m -> new MFXTableRowCell<>(Mecanico::getEspcialidad));
 
         colNom.setPrefWidth(150);
-        colEsp.setPrefWidth(150);
+        colEsp.setPrefWidth(140);
 
         tbMecanico.getTableColumns().addAll(colNom, colEsp);
     }
 
     private void setupFiltros() {
-        tbOrden.getFilters().addAll(
-                new StringFilter<>("ID",      Orden::getIdOrden)
-        );
+        tbOrden.getFilters().addAll(new StringFilter<>("ID", Orden::getIdOrden));
     }
-
-    // ─── Listeners ───────────────────────────────────────────────────────────────
 
     private void listenerSelectionOrden() {
         tbOrden.getSelectionModel().selectionProperty().addListener((obs, oldVal, newVal) -> {
@@ -160,8 +159,6 @@ public class OrdenVC {
         });
     }
 
-    // ─── Carga de datos ──────────────────────────────────────────────────────────
-
     private void obtenerOrdenes() {
         Collection<Orden> ords = ordenController.obtenerListaOrden();
         if (ords != null) listaOrden.setAll(ords);
@@ -177,13 +174,10 @@ public class OrdenVC {
         if (mecs != null) listaMecanicos.setAll(mecs);
     }
 
-    // ─── Mostrar información ─────────────────────────────────────────────────────
-
     private void mostrarInformacionOrden(Orden orden) {
         if (orden == null) return;
         txtID.setText(orden.getIdOrden());
         dpFecha.setValue(orden.getFecha());
-        // resaltar mecánicos de la orden en la tabla
         tbMecanico.getSelectionModel().clearSelection();
         for (Mecanico m : orden.getMecanicos()) {
             int index = listaMecanicos.indexOf(m);
@@ -195,30 +189,26 @@ public class OrdenVC {
 
     private void agregarorden() {
         if (selectedVehiculo == null || txtID.getText().isEmpty() || dpFecha.getValue() == null) {
-            System.err.println("Datos incompletos para crear orden.");
-            return;
+            System.err.println("Datos incompletos."); return;
         }
-
-        List<Mecanico> mecsSeleccionados = List.copyOf(tbMecanico.getSelectionModel().getSelectedValues());
-        for (Mecanico m : mecsSeleccionados) {
+        List<Mecanico> mecs = List.copyOf(tbMecanico.getSelectionModel().getSelectedValues());
+        for (Mecanico m : mecs) {
             if (App.taller.contarServiciosPorMecanico(m.getDocumento()) >= 3) {
-                System.err.println("El mecánico " + m.getNombre() + " ya tiene 3 órdenes asignadas.");
-                return;
+                System.err.println("Mecánico " + m.getNombre() + " ya tiene 3 órdenes."); return;
             }
         }
-
         Orden orden = buildOrden();
         if (orden != null && ordenController.crearOrden(orden)) {
             listaOrden.add(orden);
+            refrescarTabla();
             limpiarCampos();
         }
     }
 
-
     private void eliminarorden() {
         if (selectedOrden != null && ordenController.eliminarOrden(selectedOrden)) {
             listaOrden.remove(selectedOrden);
-            limpiarCampos();
+            refrescarTabla();
             limpiarSeleccion();
         }
     }
@@ -229,21 +219,23 @@ public class OrdenVC {
         if (actualizada != null && ordenController.actualizarOrden(selectedOrden.getIdOrden(), actualizada)) {
             int index = listaOrden.indexOf(selectedOrden);
             if (index >= 0) listaOrden.set(index, actualizada);
-            tbOrden.update();
+            refrescarTabla();
             limpiarSeleccion();
             limpiarCampos();
         }
     }
 
+    /** Fuerza el repintado de la MFXTableView desvinculando y re-vinculando los items */
+    private void refrescarTabla() {
+        tbOrden.setItems(null);
+        tbOrden.setItems(listaOrden);
+    }
+
     private Orden buildOrden() {
         if (selectedVehiculo == null || txtID.getText().isEmpty() || dpFecha.getValue() == null) return null;
-
         Orden orden = new Orden(txtID.getText(), selectedVehiculo, dpFecha.getValue());
-
-        // Mecánicos seleccionados (multiselección)
-        List<Mecanico> mecsSeleccionados = List.copyOf(tbMecanico.getSelectionModel().getSelectedValues());
-        for (Mecanico m : mecsSeleccionados) orden.agregarMecanico(m);
-
+        for (Mecanico m : List.copyOf(tbMecanico.getSelectionModel().getSelectedValues()))
+            orden.agregarMecanico(m);
         return orden;
     }
 
