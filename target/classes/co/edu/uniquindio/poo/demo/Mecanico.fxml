@@ -1,44 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXComboBox?>
+<?import io.github.palexdev.materialfx.controls.MFXTableView?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="475.0" prefWidth="757.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.poo.demo.VC.MecanicoVC">
+<AnchorPane prefHeight="520.0" prefWidth="780.0" style="-fx-background-color: #F5F5F5;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.poo.demo.VC.MecanicoVC">
     <children>
-        <Label layoutX="286.0" layoutY="6.0" text="Mecanico" />
-        <Label layoutX="46.0" layoutY="54.0" text="Documento" />
-        <Label layoutX="46.0" layoutY="90.0" text="Nombre" />
-        <Label layoutX="46.0" layoutY="132.0" text="Telefono" />
-        <Label layoutX="277.0" layoutY="54.0" text="Email" />
-        <Label layoutX="277.0" layoutY="90.0" text="Direccion" />
-        <TextField fx:id="txtDocumento" layoutX="115.0" layoutY="50.0" />
-        <TextField fx:id="txtNombre" layoutX="115.0" layoutY="86.0" />
-        <TextField fx:id="txtTelefono" layoutX="115.0" layoutY="128.0" />
-        <TextField fx:id="txtEmail" layoutX="343.0" layoutY="50.0" />
-        <TextField fx:id="txtDireccion" layoutX="343.0" layoutY="86.0" />
-        <ComboBox fx:id="cbxEstado" layoutX="342.0" layoutY="128.0" prefWidth="150.0" promptText="Estado" />
-        <TableView fx:id="tbMecanico" layoutY="229.0" prefHeight="247.0" prefWidth="624.0">
-            <columns>
-                <TableColumn fx:id="tbcDocumento" prefWidth="99.0" text="Documento" />
-                <TableColumn fx:id="tbcNombre" text="Nombre" />
-                <TableColumn fx:id="tbcTelefono" prefWidth="76.0" text="Telefono" />
-                <TableColumn fx:id="tbcEmail" prefWidth="84.0" text="Email" />
-                <TableColumn fx:id="tbcDireccion" prefWidth="84.0" text="Direccion" />
-                <TableColumn fx:id="tbcEstado" prefWidth="95.0" text="Estado" />
-            <TableColumn fx:id="tbcEspecialidad" prefWidth="104.0" text="Especialidad" />
-            </columns>
-        </TableView>
-        <Button fx:id="bttAgregarMecanico" layoutX="658.0" layoutY="238.0" mnemonicParsing="false" onAction="#AgregarMecanico" prefHeight="25.0" prefWidth="62.0" text="Agregar" />
-        <Button fx:id="bttEliminarMecanico" layoutX="658.0" layoutY="278.0" mnemonicParsing="false" onAction="#EliminarMecanico" prefHeight="25.0" prefWidth="62.0" text="Eliminar" />
-        <Button fx:id="bttModificarMecanico" layoutX="648.0" layoutY="315.0" mnemonicParsing="false" onAction="#ModificarMecanico" prefHeight="25.0" prefWidth="72.0" text="Modificar" />
-        <Button fx:id="bttLimpiarMecanico" layoutX="653.0" layoutY="354.0" mnemonicParsing="false" onAction="#LimpiarMecanico" prefHeight="25.0" prefWidth="72.0" text="Limpiar" />
-        <Button fx:id="bttVolver" mnemonicParsing="false" onAction="#Volver" text="Volver" />
-      <Label layoutX="44.0" layoutY="179.0" text="Especialidad" />
-      <TextField fx:id="txtEspecialidad" layoutX="115.0" layoutY="175.0" />
+        <VBox layoutX="1.0" prefHeight="520.0" prefWidth="780.0" spacing="16" style="-fx-background-color: white; -fx-background-radius: 8; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 8, 0, 0, 2);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="0.0">
+            <padding><Insets bottom="24" left="24" right="24" top="24" /></padding>
+             <MFXButton fx:id="bttVolver" onAction="#Volver" style="-fx-background-color: #E0E0E0; -fx-text-fill: #424242; -fx-background-radius: 4;" text="← Volver" />
+
+            <Label style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #1565C0;" text="Gestión de Mecánicos" />
+
+            <GridPane hgap="16" vgap="4">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="33" />
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="33" />
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="34" />
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints />
+                    <RowConstraints />
+                    <RowConstraints />
+                </rowConstraints>
+
+                <MFXTextField fx:id="txtDocumento" floatingText="Documento" maxWidth="Infinity" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                <MFXTextField fx:id="txtNombre" floatingText="Nombre" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                <MFXTextField fx:id="txtTelefono" floatingText="Teléfono" maxWidth="Infinity" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+
+                <MFXTextField fx:id="txtEmail" floatingText="Email" maxWidth="Infinity" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                <MFXTextField fx:id="txtDireccion" floatingText="Dirección" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <MFXTextField fx:id="txtEspecialidad" floatingText="Especialidad" maxWidth="Infinity" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                <MFXComboBox fx:id="cbxEstado" floatingText="Estado" maxWidth="Infinity" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            </GridPane>
+
+            <HBox alignment="CENTER_RIGHT" spacing="10">
+                <MFXButton fx:id="bttLimpiarMecanico" onAction="#LimpiarMecanico" style="-fx-background-color: #E0E0E0; -fx-text-fill: #424242; -fx-background-radius: 4;" text="Limpiar" />
+                <MFXButton fx:id="bttEliminarMecanico" onAction="#EliminarMecanico" style="-fx-background-color: #EF5350; -fx-text-fill: white; -fx-background-radius: 4;" text="Eliminar" />
+                <MFXButton fx:id="bttModificarMecanico" onAction="#ModificarMecanico" style="-fx-background-color: #FB8C00; -fx-text-fill: white; -fx-background-radius: 4;" text="Modificar" />
+                <MFXButton fx:id="bttAgregarMecanico" onAction="#AgregarMecanico" style="-fx-background-color: #1565C0; -fx-text-fill: white; -fx-background-radius: 4;" text="Agregar" />
+            </HBox>
+
+            <MFXTableView fx:id="tbMecanico" maxHeight="Infinity" VBox.vgrow="ALWAYS" />
+        </VBox>
     </children>
-</Pane>
+</AnchorPane>

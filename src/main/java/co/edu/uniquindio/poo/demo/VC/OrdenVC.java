@@ -3,342 +3,220 @@ package co.edu.uniquindio.poo.demo.VC;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import co.edu.uniquindio.poo.demo.App;
-import co.edu.uniquindio.poo.demo.Back.*;
+import co.edu.uniquindio.poo.demo.Back.Mecanico;
+import co.edu.uniquindio.poo.demo.Back.Orden;
 import co.edu.uniquindio.poo.demo.Back.Vehiculo;
 import co.edu.uniquindio.poo.demo.Controller.OrdenController;
-import co.edu.uniquindio.poo.demo.Controller.VehiculoController;
-import javafx.beans.property.SimpleStringProperty;
+
+import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXDatePicker;
+import io.github.palexdev.materialfx.controls.MFXTableColumn;
+import io.github.palexdev.materialfx.controls.MFXTableView;
+import io.github.palexdev.materialfx.controls.MFXTextField;
+import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
+import io.github.palexdev.materialfx.filter.StringFilter;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
 
 public class OrdenVC {
 
     App app;
     OrdenController ordenController;
-    private ObservableList<Orden> listaOrden = FXCollections.observableArrayList();
+    private ObservableList<Orden>    listaOrden    = FXCollections.observableArrayList();
     private ObservableList<Vehiculo> listaVehiculo = FXCollections.observableArrayList();
-    private ObservableList<Mecanico> listaMecanicos = FXCollections.observableArrayList();
-    private Orden selectedOrden;
+    private ObservableList<Mecanico> listaMecanicos= FXCollections.observableArrayList();
+    private Orden    selectedOrden;
     private Vehiculo selectedVehiculo;
-    private Mecanico selectedMecanico;
 
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-    @FXML
-    private ResourceBundle resources;
+    @FXML private ResourceBundle resources;
+    @FXML private URL location;
 
-    @FXML
-    private URL location;
+    @FXML private MFXButton bttAgregarOrden;
+    @FXML private MFXButton bttEliminarOrden;
+    @FXML private MFXButton bttLimpiarOrden;
+    @FXML private MFXButton bttModificarOrden;
+    @FXML private MFXButton bttVolver;
 
-    @FXML
-    private Button bttAgregarOrden;
+    @FXML private MFXDatePicker        dpFecha;
+    @FXML private MFXTextField         txtID;
+    @FXML private MFXTableView<Orden>    tbOrden;
+    @FXML private MFXTableView<Vehiculo> tbVehiculo;
+    @FXML private MFXTableView<Mecanico> tbMecanico;
 
-    @FXML
-    private Button bttEliminarOrden;
-
-    @FXML
-    private Button bttLimpiarOrden;
-
-    @FXML
-    private Button bttModificarOrden;
-
-    @FXML
-    private Button bttVolver;
-
-    @FXML
-    private DatePicker dpFecha;
-
-    @FXML
-    private TableView<Mecanico> tbMecanico;
-
-    @FXML
-    private TableView<Orden> tbOrden;
-
-    @FXML
-    private TableColumn<Vehiculo, String> tbPlaca;
-
-    @FXML
-    private TableView<Vehiculo> tbVehiculo;
-
-    @FXML
-    private TableColumn<Orden, String> tbcCliente;
-
-    @FXML
-    private TableColumn<Orden, String> tbcFecha;
-
-    @FXML
-    private TableColumn<Orden, String> tbcID;
-
-    @FXML
-    private TableColumn<Orden, String> tbcMecanicos;
-
-    @FXML
-    private TableColumn<Mecanico, String> tbcNombreMecanico;
-
-    @FXML
-    private TableColumn<Orden, String> tbcVehiculo;
-
-    @FXML
-    private TextField txtID;
-
-    @FXML
-    void AgregarOrden(ActionEvent event) {
-        agregarorden();
-    }
-
-    @FXML
-    void EliminarOrden(ActionEvent event) {
-        eliminarorden();
-    }
-
-    @FXML
-    void LimpiarOrden(ActionEvent event) {
-        limpiarCampos();
-    }
-
-    @FXML
-    void ModificarOrden(ActionEvent event) {
-        modificarOrden();
-    }
-
-    @FXML
-    void Volver(ActionEvent event) {
-        try {
-            app.openViewPrincipal();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    @FXML void AgregarOrden(ActionEvent event)  { agregarorden(); }
+    @FXML void EliminarOrden(ActionEvent event) { eliminarorden(); }
+    @FXML void LimpiarOrden(ActionEvent event)  { limpiarCampos(); }
+    @FXML void ModificarOrden(ActionEvent event){ modificarOrden(); }
+    @FXML void Volver(ActionEvent event) {
+        try { app.MenuAdmin(); } catch (Exception e) { e.printStackTrace(); }
     }
 
     @FXML
     void initialize() {
-        assert bttAgregarOrden != null : "fx:id=\"bttAgregarOrden\" was not injected: check your FXML file 'Orden.fxml'.";
-        assert bttEliminarOrden != null : "fx:id=\"bttEliminarOrden\" was not injected: check your FXML file 'Orden.fxml'.";
-        assert bttLimpiarOrden != null : "fx:id=\"bttLimpiarOrden\" was not injected: check your FXML file 'Orden.fxml'.";
-        assert bttModificarOrden != null : "fx:id=\"bttModificarOrden\" was not injected: check your FXML file 'Orden.fxml'.";
-        assert bttVolver != null : "fx:id=\"bttVolver\" was not injected: check your FXML file 'Orden.fxml'.";
-        assert dpFecha != null : "fx:id=\"dpFecha\" was not injected: check your FXML file 'Orden.fxml'.";
-        assert tbMecanico != null : "fx:id=\"tbMecanico\" was not injected: check your FXML file 'Orden.fxml'.";
-        assert tbOrden != null : "fx:id=\"tbOrden\" was not injected: check your FXML file 'Orden.fxml'.";
-        assert tbPlaca != null : "fx:id=\"tbPlaca\" was not injected: check your FXML file 'Orden.fxml'.";
-        assert tbVehiculo != null : "fx:id=\"tborden\" was not injected: check your FXML file 'Orden.fxml'.";
-        assert tbcCliente != null : "fx:id=\"tbcCliente\" was not injected: check your FXML file 'Orden.fxml'.";
-        assert tbcFecha != null : "fx:id=\"tbcFecha\" was not injected: check your FXML file 'Orden.fxml'.";
-        assert tbcID != null : "fx:id=\"tbcID\" was not injected: check your FXML file 'Orden.fxml'.";
-        assert tbcMecanicos != null : "fx:id=\"tbcMecanicos\" was not injected: check your FXML file 'Orden.fxml'.";
-        assert tbcNombreMecanico != null : "fx:id=\"tbcNombreMecanico\" was not injected: check your FXML file 'Orden.fxml'.";
-        assert tbcVehiculo != null : "fx:id=\"tbcorden\" was not injected: check your FXML file 'Orden.fxml'.";
-        assert txtID != null : "fx:id=\"txtID\" was not injected: check your FXML file 'Orden.fxml'.";
-
-        if (App.taller == null) {
-            System.err.println("No se puede agregar el taller");
-            return;
-        }
-
+        if (App.taller == null) { System.err.println("Taller null"); return; }
         ordenController = new OrdenController(App.taller);
-        obtenerorden();
-        obtenerVehiculon();
+
+        obtenerVehiculos();
         obtenerMecanicos();
-        initView();
+        obtenerOrdenes();
+
+        setupColumnasOrden();
+        setupColumnasVehiculo();
+        setupColumnasMecanico();
+        setupFiltros();
+
+        tbOrden   .setItems(listaOrden);
+        tbVehiculo.setItems(listaVehiculo);
+        tbMecanico.setItems(listaMecanicos);
+
+        // MFXTableView soporta multiselección configurando el selection model
+        tbMecanico.getSelectionModel().setAllowsMultipleSelection(true);
+
+        listenerSelectionOrden();
+        listenerSelectionVehiculo();
+    }
+
+    // ─── Columnas ────────────────────────────────────────────────────────────────
+
+    private void setupColumnasOrden() {
+        MFXTableColumn<Orden> colID       = new MFXTableColumn<>("ID",        true, Comparator.comparing(Orden::getIdOrden));
+        MFXTableColumn<Orden> colFecha    = new MFXTableColumn<>("Fecha",     true, Comparator.comparing(Orden::getFecha));
+        MFXTableColumn<Orden> colCliente  = new MFXTableColumn<>("Cliente",   true, Comparator.comparing(o -> o.getCliente().getNombre()));
+        MFXTableColumn<Orden> colVehiculo = new MFXTableColumn<>("Vehículo",  true, Comparator.comparing(o -> o.getVehiculo().getPlaca()));
+        MFXTableColumn<Orden> colMecs     = new MFXTableColumn<>("Mecánicos", false, null);
+
+        colID      .setRowCellFactory(o -> new MFXTableRowCell<>(Orden::getIdOrden));
+        colFecha   .setRowCellFactory(o -> new MFXTableRowCell<>(or -> or.getFecha().format(FORMATTER)));
+        colCliente .setRowCellFactory(o -> new MFXTableRowCell<>(or -> or.getCliente().getNombre()));
+        colVehiculo.setRowCellFactory(o -> new MFXTableRowCell<>(or -> or.getVehiculo().getPlaca()));
+        colMecs    .setRowCellFactory(o -> new MFXTableRowCell<>(Orden::getNombresMecanicos));
+
+        colID      .setPrefWidth(80);
+        colFecha   .setPrefWidth(100);
+        colCliente .setPrefWidth(120);
+        colVehiculo.setPrefWidth(100);
+        colMecs    .setPrefWidth(200);
+
+        tbOrden.getTableColumns().addAll(colID, colFecha, colCliente, colVehiculo, colMecs);
+    }
+
+    private void setupColumnasVehiculo() {
+        MFXTableColumn<Vehiculo> colPlaca = new MFXTableColumn<>("Placa", true, Comparator.comparing(Vehiculo::getPlaca));
+        MFXTableColumn<Vehiculo> colMarca = new MFXTableColumn<>("Marca", true, Comparator.comparing(Vehiculo::getMarca));
+
+        colPlaca.setRowCellFactory(v -> new MFXTableRowCell<>(Vehiculo::getPlaca));
+        colMarca.setRowCellFactory(v -> new MFXTableRowCell<>(Vehiculo::getMarca));
+
+        colPlaca.setPrefWidth(150);
+        colMarca.setPrefWidth(150);
+
+        tbVehiculo.getTableColumns().addAll(colPlaca, colMarca);
+    }
+
+    private void setupColumnasMecanico() {
+        MFXTableColumn<Mecanico> colNom = new MFXTableColumn<>("Nombre",      true, Comparator.comparing(Mecanico::getNombre));
+        MFXTableColumn<Mecanico> colEsp = new MFXTableColumn<>("Especialidad",true, Comparator.comparing(Mecanico::getEspcialidad));
+
+        colNom.setRowCellFactory(m -> new MFXTableRowCell<>(Mecanico::getNombre));
+        colEsp.setRowCellFactory(m -> new MFXTableRowCell<>(Mecanico::getEspcialidad));
+
+        colNom.setPrefWidth(150);
+        colEsp.setPrefWidth(150);
+
+        tbMecanico.getTableColumns().addAll(colNom, colEsp);
+    }
+
+    private void setupFiltros() {
+        tbOrden.getFilters().addAll(
+                new StringFilter<>("ID",      Orden::getIdOrden)
+        );
+    }
+
+    // ─── Listeners ───────────────────────────────────────────────────────────────
+
+    private void listenerSelectionOrden() {
+        tbOrden.getSelectionModel().selectionProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal.isEmpty()) {
+                selectedOrden = newVal.values().iterator().next();
+                mostrarInformacionOrden(selectedOrden);
+            }
+        });
+    }
+
+    private void listenerSelectionVehiculo() {
+        tbVehiculo.getSelectionModel().selectionProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal.isEmpty())
+                selectedVehiculo = newVal.values().iterator().next();
+        });
+    }
+
+    // ─── Carga de datos ──────────────────────────────────────────────────────────
+
+    private void obtenerOrdenes() {
+        Collection<Orden> ords = ordenController.obtenerListaOrden();
+        if (ords != null) listaOrden.setAll(ords);
+    }
+
+    private void obtenerVehiculos() {
+        Collection<Vehiculo> vehiculos = ordenController.obtenerListaVehiculo();
+        if (vehiculos != null) listaVehiculo.setAll(vehiculos);
     }
 
     private void obtenerMecanicos() {
-        if (listaMecanicos == null) {
-            listaMecanicos = FXCollections.observableArrayList();
-        }
-
-        Collection<Mecanico> mecanicos = ordenController.obtenerListaMecanicos();
-        if (mecanicos != null) {
-            listaMecanicos.setAll(mecanicos);
-        } else {
-            System.out.println("No se encontraron mecánicos.");
-        }
+        Collection<Mecanico> mecs = ordenController.obtenerListaMecanicos();
+        if (mecs != null) listaMecanicos.setAll(mecs);
     }
 
+    // ─── Mostrar información ─────────────────────────────────────────────────────
 
-    private void obtenerVehiculon() {
-        if (listaVehiculo == null) {
-            listaVehiculo = FXCollections.observableArrayList();
-        }
-
-        Collection<Vehiculo> vehiculos = ordenController.obtenerListaVehiculo();
-        if (vehiculos != null) {
-            listaVehiculo.setAll(vehiculos);
-        } else {
-            System.out.println("No se encontraron jugadpres.");
+    private void mostrarInformacionOrden(Orden orden) {
+        if (orden == null) return;
+        txtID.setText(orden.getIdOrden());
+        dpFecha.setValue(orden.getFecha());
+        // resaltar mecánicos de la orden en la tabla
+        tbMecanico.getSelectionModel().clearSelection();
+        for (Mecanico m : orden.getMecanicos()) {
+            int index = listaMecanicos.indexOf(m);
+            if (index >= 0) tbMecanico.getSelectionModel().selectIndex(index);
         }
     }
 
+    // ─── CRUD ────────────────────────────────────────────────────────────────────
 
-    /**
-     *Metodo que permite obtener los datos de paciente
-     */
-    private void obtenerorden() {
-        if (ordenController != null) {
-            Collection<Orden> ords = ordenController.obtenerListaOrden();
-            if (ords != null) {
-                listaOrden.clear();
-                listaOrden.addAll(ords);
-            }
-        } else {
-            System.err.println("PacienteController no está inicializado.");
-        }
-    }
-
-
-    /**
-     *Metodo que inicializa la vista en javaFX
-     */
-    private void initView() {
-        initDataBinding();
-        tbOrden.getItems().clear();
-        tbOrden.setItems(listaOrden);
-        tbVehiculo.setItems(listaVehiculo);
-        tbMecanico.setItems(listaMecanicos);
-        tbMecanico.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-
-        listenerSelectionorden();
-        listenerSelectionVehiculo();
-        listenerSelectionMecanico();
-    }
-
-
-    /**
-     *Metodo que configura la vinculacion de datos en las tablas
-     */
-    private void initDataBinding() {
-        tbcID.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getIdOrden()));
-        tbcFecha.setCellValueFactory(cellData ->
-                new SimpleStringProperty(
-                        cellData.getValue().getFecha().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-                )
-        );
-        tbcCliente.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getVehiculo().getDuenio().getNombre()));
-        tbcVehiculo.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getVehiculo().getPlaca()));
-        tbPlaca.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getPlaca()));
-        tbcNombreMecanico.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNombre()));
-        tbcMecanicos.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getNombresMecanicos())
-        );
-
-
-    }
-
-    /**
-     *Metodo que escucha los cambios en la selecion de paciente y actualiza la variable selectedPaciente
-     */
-    private void listenerSelectionorden() {
-        tbOrden.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            selectedOrden = newSelection;
-            mostarInformacionorden(selectedOrden);
-        });
-    }
-
-
-    private void listenerSelectionVehiculo() {
-        tbVehiculo.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            selectedVehiculo = newSelection;
-        });
-    }
-
-    private void listenerSelectionMecanico() {
-        tbMecanico.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            selectedMecanico = newSelection;
-        });
-    }
-
-
-    /**
-     *Metodo que muestra la información del paciente sleccionado en los campos de la interfaz
-     * @param orden
-     */
-    private void mostarInformacionorden(Orden orden) {
-        if (orden != null) {
-            txtID.setText(orden.getIdOrden());
-            dpFecha.setValue(orden.getFecha());
-
-            // Selecciona automáticamente los mecánicos de la orden en la tabla
-            tbMecanico.getSelectionModel().clearSelection();
-            for (Mecanico mecanico : orden.getMecanicos()) {
-                int index = listaMecanicos.indexOf(mecanico);
-                if (index >= 0) {
-                    tbMecanico.getSelectionModel().select(index);
-                }
-            }
-        }
-    }
-
-    /**
-     *Metodo que agrega un paciente
-     */
     private void agregarorden() {
-        // Validar que se haya seleccionado un vehículo
-        if (selectedVehiculo == null) {
-            System.err.println("Error: Debe seleccionar un vehículo.");
+        if (selectedVehiculo == null || txtID.getText().isEmpty() || dpFecha.getValue() == null) {
+            System.err.println("Datos incompletos para crear orden.");
             return;
         }
 
-        // Validar que se haya ingresado un ID
-        if (txtID.getText().isEmpty()) {
-            System.err.println("Error: Debe ingresar un ID de orden.");
-            return;
+        List<Mecanico> mecsSeleccionados = List.copyOf(tbMecanico.getSelectionModel().getSelectedValues());
+        for (Mecanico m : mecsSeleccionados) {
+            if (App.taller.contarServiciosPorMecanico(m.getDocumento()) >= 3) {
+                System.err.println("El mecánico " + m.getNombre() + " ya tiene 3 órdenes asignadas.");
+                return;
+            }
         }
 
-        // Validar que se haya seleccionado una fecha
-        if (dpFecha.getValue() == null) {
-            System.err.println("Error: Debe seleccionar una fecha.");
-            return;
-        }
-
-        Orden orden = buildorden();
+        Orden orden = buildOrden();
         if (orden != null && ordenController.crearOrden(orden)) {
             listaOrden.add(orden);
             limpiarCampos();
         }
     }
 
-    /**
-     *Metodo que crea una instancia de Paciente con los datos ingresados en la interfaz
-     * @return
-     */
-    private Orden buildorden() {
-        if (selectedVehiculo == null || txtID.getText().isEmpty() || dpFecha.getValue() == null) {
-            System.err.println("Error: Datos incompletos.");
-            return null;
-        }
 
-        Orden orden = new Orden(
-                txtID.getText(),
-                selectedVehiculo,
-                dpFecha.getValue()
-        );
-
-        // Agregar los mecánicos seleccionados en la tabla de mecánicos
-        // El usuario puede seleccionar múltiples mecánicos con Ctrl+Click
-        ObservableList<Mecanico> mecanicosSeleccionados = tbMecanico.getSelectionModel().getSelectedItems();
-        for (Mecanico mecanico : mecanicosSeleccionados) {
-            orden.agregarMecanico(mecanico);
-        }
-
-        return orden;
-    }
-
-
-    /**
-     *Metodo que elimina un paciente
-     */
     private void eliminarorden() {
-        if (selectedOrden == null) {
-            System.err.println("Error: Debe seleccionar una orden para eliminar.");
-            return;
-        }
-
-        if (ordenController.eliminarOrden(selectedOrden)) {
+        if (selectedOrden != null && ordenController.eliminarOrden(selectedOrden)) {
             listaOrden.remove(selectedOrden);
             limpiarCampos();
             limpiarSeleccion();
@@ -346,47 +224,43 @@ public class OrdenVC {
     }
 
     private void modificarOrden() {
-        if (selectedOrden == null) {
-            System.err.println("Error: Debe seleccionar una orden para modificar.");
-            return;
-        }
-
-        Orden ordenActualizada = buildorden();
-        if (ordenActualizada != null && ordenController.actualizarOrden(selectedOrden.getIdOrden(), ordenActualizada)) {
+        if (selectedOrden == null) return;
+        Orden actualizada = buildOrden();
+        if (actualizada != null && ordenController.actualizarOrden(selectedOrden.getIdOrden(), actualizada)) {
             int index = listaOrden.indexOf(selectedOrden);
-            listaOrden.set(index, ordenActualizada);
-            limpiarCampos();
+            if (index >= 0) listaOrden.set(index, actualizada);
+            tbOrden.update();
             limpiarSeleccion();
+            limpiarCampos();
         }
     }
 
-    /**
-     * Metodo que limpia la seleccion de la tabla
-     */
+    private Orden buildOrden() {
+        if (selectedVehiculo == null || txtID.getText().isEmpty() || dpFecha.getValue() == null) return null;
+
+        Orden orden = new Orden(txtID.getText(), selectedVehiculo, dpFecha.getValue());
+
+        // Mecánicos seleccionados (multiselección)
+        List<Mecanico> mecsSeleccionados = List.copyOf(tbMecanico.getSelectionModel().getSelectedValues());
+        for (Mecanico m : mecsSeleccionados) orden.agregarMecanico(m);
+
+        return orden;
+    }
+
     private void limpiarSeleccion() {
-        tbMecanico.getSelectionModel().clearSelection();
+        tbOrden   .getSelectionModel().clearSelection();
         tbVehiculo.getSelectionModel().clearSelection();
-        tbOrden.getSelectionModel().clearSelection();
+        tbMecanico.getSelectionModel().clearSelection();
         limpiarCampos();
     }
 
-    /**
-     *Metodo qi¿ue limpia los acmpos del paciente seleccionado
-     */
     private void limpiarCampos() {
         txtID.clear();
         dpFecha.setValue(null);
-        tbVehiculo.getSelectionModel().clearSelection();
-        tbMecanico.getSelectionModel().clearSelection();
+        selectedOrden    = null;
+        selectedVehiculo = null;
     }
 
-    /**
-     *metodo que seta APP
-     * @param app
-     */
-    public void setApp(App app) {
-        this.app = app;
-    }
-
+    public void setApp(App app) { this.app = app; }
 }
 

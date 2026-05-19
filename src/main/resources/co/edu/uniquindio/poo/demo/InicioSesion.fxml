@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXPasswordField?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import io.github.palexdev.mfxcore.controls.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="287.0" prefWidth="368.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.poo.demo.VC.InicioSesionVC">
+   <children>
+      <Label layoutX="110.0" layoutY="26.0" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #ffffff;" text="Taller Mecanico" />
+      <MFXTextField fx:id="txtUsuario" floatMode="DISABLED" layoutX="126.0" layoutY="90.0" prefHeight="36.0" prefWidth="118.0" />
+      <MFXPasswordField fx:id="txtContrasena" floatMode="DISABLED" layoutX="126.0" layoutY="144.0" prefHeight="17.0" prefWidth="84.0" />
+      <MFXButton fx:id="bttIngresar" buttonType="RAISED" layoutX="144.0" layoutY="204.0" onAction="#Ingresar" prefHeight="28.0" prefWidth="83.0" text="Ingresar" />
+   </children>
+</AnchorPane>

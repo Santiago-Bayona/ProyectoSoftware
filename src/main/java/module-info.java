@@ -1,8 +1,7 @@
 module co.edu.uniquindio.poo.demo {
-    requires javafx.controls;
-    requires javafx.fxml;
 
     requires org.kordamp.bootstrapfx.core;
+    requires MaterialFX;
 
     opens co.edu.uniquindio.poo.demo to javafx.fxml;
     exports co.edu.uniquindio.poo.demo;

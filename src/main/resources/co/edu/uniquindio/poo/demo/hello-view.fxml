@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.Pane?>
 
-
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.poo.demo.VC.MenuPrincipalVC">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="278.0" prefWidth="552.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.poo.demo.VC.MenuPrincipalVC">
    <children>
-      <Label layoutX="259.0" layoutY="20.0" text="Taller Mecanico" />
-      <Button fx:id="bttCliente" layoutX="69.0" layoutY="64.0" mnemonicParsing="false" onAction="#AbrirMenuCliente" text="Cliente" />
-      <Button fx:id="bttFactura" layoutX="69.0" layoutY="118.0" mnemonicParsing="false" onAction="#AbirMenuFactura" text="Factura" />
-      <Button fx:id="bttMecanico" layoutX="69.0" layoutY="175.0" mnemonicParsing="false" onAction="#AbrirMecanico" text="Mecanico" />
-      <Button fx:id="bttOrden" layoutX="69.0" layoutY="241.0" mnemonicParsing="false" onAction="#AbirOrden" text="Orden" />
-      <Button fx:id="bttPago" layoutX="248.0" layoutY="64.0" mnemonicParsing="false" onAction="#AbrirPago" text="Pago" />
-      <Button fx:id="bttRepuesto" layoutX="248.0" layoutY="118.0" mnemonicParsing="false" onAction="#AbrirRepuesto" text="Repuesto" />
-      <Button fx:id="bttServicio" layoutX="259.0" layoutY="200.0" mnemonicParsing="false" onAction="#AbrirServicio" text="Servicio" />
-      <Button fx:id="bttVehiculo" layoutX="266.0" layoutY="266.0" mnemonicParsing="false" onAction="#AbrirVehiculo" text="Vehiculo" />
+      <Label layoutX="202.0" layoutY="23.0" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #34485c;" text="Taller Mecanico" />
+      <MFXButton fx:id="bttCliente" buttonType="RAISED" depthLevel="LEVEL4" layoutX="69.0" layoutY="64.0" mnemonicParsing="false" onAction="#AbrirMenuCliente" prefHeight="25.0" prefWidth="69.0" style="-fx-background-color: #34485c; -fx-text-fill: white" text="Cliente" />
+      <MFXButton fx:id="bttFactura" buttonType="RAISED" depthLevel="LEVEL4" layoutX="69.0" layoutY="118.0" mnemonicParsing="false" onAction="#AbirMenuFactura" prefHeight="25.0" prefWidth="69.0" style="-fx-background-color: #34485c; -fx-text-fill: white" text="Factura" />
+      <MFXButton fx:id="bttMecanico" buttonType="RAISED" depthLevel="LEVEL4" layoutX="69.0" layoutY="175.0" mnemonicParsing="false" onAction="#AbrirMecanico" style="-fx-background-color: #34485c; -fx-text-fill: white" text="Mecanico" />
+      <MFXButton fx:id="bttOrden" buttonType="RAISED" depthLevel="LEVEL4" layoutX="69.0" layoutY="229.0" mnemonicParsing="false" onAction="#AbirOrden" prefHeight="25.0" prefWidth="69.0" style="-fx-background-color: #34485c; -fx-text-fill: white" text="Orden" />
+      <MFXButton fx:id="bttPago" buttonType="RAISED" depthLevel="LEVEL4" layoutX="387.0" layoutY="64.0" mnemonicParsing="false" onAction="#AbrirPago" prefHeight="25.0" prefWidth="67.0" style="-fx-background-color: #34485c; -fx-text-fill: white" text="Pago" />
+      <MFXButton fx:id="bttRepuesto" buttonType="RAISED" depthLevel="LEVEL4" layoutX="387.0" layoutY="118.0" mnemonicParsing="false" onAction="#AbrirRepuesto" prefHeight="25.0" prefWidth="69.0" style="-fx-background-color: #34485c; -fx-text-fill: white" text="Repuesto" />
+      <MFXButton fx:id="bttServicio" buttonType="RAISED" depthLevel="LEVEL4" layoutX="388.0" layoutY="175.0" mnemonicParsing="false" onAction="#AbrirServicio" prefHeight="25.0" prefWidth="67.0" style="-fx-background-color: #34485c; -fx-text-fill: white" text="Servicio" />
+      <MFXButton fx:id="bttVehiculo" buttonType="RAISED" depthLevel="LEVEL4" layoutX="387.0" layoutY="229.0" mnemonicParsing="false" onAction="#AbrirVehiculo" prefHeight="25.0" prefWidth="69.0" style="-fx-background-color: #34485c; -fx-text-fill: white" text="Vehiculo" />
    </children>
 </Pane>

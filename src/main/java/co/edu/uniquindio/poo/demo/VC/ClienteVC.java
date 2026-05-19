@@ -7,16 +7,22 @@ import co.edu.uniquindio.poo.demo.App;
 import co.edu.uniquindio.poo.demo.Back.Cliente;
 import co.edu.uniquindio.poo.demo.Back.Estado;
 import co.edu.uniquindio.poo.demo.Controller.ClienteController;
-import javafx.beans.property.SimpleStringProperty;
+
+import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXComboBox;
+import io.github.palexdev.materialfx.controls.MFXTextField;
+import io.github.palexdev.materialfx.controls.MFXTableView;
+import io.github.palexdev.materialfx.controls.MFXTableColumn;
+import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
+import io.github.palexdev.materialfx.filter.StringFilter;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.geometry.Pos;
+
+import java.util.Comparator;
 
 public class ClienteVC {
 
@@ -25,235 +31,139 @@ public class ClienteVC {
     private ObservableList<Cliente> listaCliente = FXCollections.observableArrayList();
     private Cliente selectedCliente;
 
+    @FXML private ResourceBundle resources;
+    @FXML private URL location;
 
+    @FXML private MFXButton    bttAgregarCliente;
+    @FXML private MFXButton    bttEliminarCliente;
+    @FXML private MFXButton    bttLimpiarCliente;
+    @FXML private MFXButton    bttModificarCliente;
+    @FXML private MFXButton    bttVolver;
 
-    @FXML
-    private ResourceBundle resources;
+    @FXML private MFXComboBox<Estado> cbxEstado;
 
-    @FXML
-    private URL location;
+    @FXML private MFXTableView<Cliente> tbCliente;
 
-    @FXML
-    private Button bttAgregarCliente;
+    @FXML private MFXTextField txtDireccion;
+    @FXML private MFXTextField txtDocumento;
+    @FXML private MFXTextField txtEmail;
+    @FXML private MFXTextField txtNombre;
+    @FXML private MFXTextField txtTelefono;
 
-    @FXML
-    private Button bttEliminarCliente;
+    // ─── Acciones FXML ───────────────────────────────────────────────────────────
 
-    @FXML
-    private Button bttLimpiarCliente;
-
-    @FXML
-    private Button bttModificarCliente;
-
-    @FXML
-    private Button bttVolver;
-
-    @FXML
-    private ComboBox<Estado> cbxEstado;
-
-    @FXML
-    private TableView<Cliente> tbCliente;
-
-    @FXML
-    private TableColumn<Cliente, String> tbcDireccion;
-
-    @FXML
-    private TableColumn<Cliente, String> tbcDocumento;
-
-    @FXML
-    private TableColumn<Cliente, String> tbcEmail;
-
-    @FXML
-    private TableColumn<Cliente, String> tbcEstado;
-
-    @FXML
-    private TableColumn<Cliente, String> tbcNombre;
-
-    @FXML
-    private TableColumn<Cliente, String> tbcTelefono;
-
-    @FXML
-    private TextField txtDireccion;
-
-    @FXML
-    private TextField txtDocumento;
-
-    @FXML
-    private TextField txtEmail;
-
-    @FXML
-    private TextField txtNombre;
-
-    @FXML
-    private TextField txtTelefono;
-
-    @FXML
-    void AgregarCliente(ActionEvent event) {
-        agregarCliente();
-    }
-
-    @FXML
-    void EliminarCliente(ActionEvent event) {
-        eliminarCliente();
-    }
-
-    @FXML
-    void LimpiarCliente(ActionEvent event) {
-        limpiarCampos();
-    }
-
-    @FXML
-    void ModificarCliente(ActionEvent event) {
-        actualizarCliente();
-    }
+    @FXML void AgregarCliente(ActionEvent event)  { agregarCliente(); }
+    @FXML void EliminarCliente(ActionEvent event) { eliminarCliente(); }
+    @FXML void LimpiarCliente(ActionEvent event)  { limpiarCampos(); }
+    @FXML void ModificarCliente(ActionEvent event){ actualizarCliente(); }
 
     @FXML
     void Volver(ActionEvent event) {
-        try {
-            app.openViewPrincipal();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        try { app.MenuAdmin(); } catch (Exception e) { e.printStackTrace(); }
     }
 
+    // ─── Inicialización ──────────────────────────────────────────────────────────
 
     @FXML
     void initialize() {
-        assert bttAgregarCliente != null : "fx:id=\"bttAgregarCliente\" was not injected: check your FXML file 'Cliente.fxml'.";
-        assert bttEliminarCliente != null : "fx:id=\"bttEliminarCliente\" was not injected: check your FXML file 'Cliente.fxml'.";
-        assert bttLimpiarCliente != null : "fx:id=\"bttLimpiarCliente\" was not injected: check your FXML file 'Cliente.fxml'.";
-        assert bttModificarCliente != null : "fx:id=\"bttModificarCliente\" was not injected: check your FXML file 'Cliente.fxml'.";
-        assert bttVolver != null : "fx:id=\"bttVolver\" was not injected: check your FXML file 'Cliente.fxml'.";
-        assert cbxEstado != null : "fx:id=\"cbxEstado\" was not injected: check your FXML file 'Cliente.fxml'.";
-        assert tbCliente != null : "fx:id=\"tbCliente\" was not injected: check your FXML file 'Cliente.fxml'.";
-        assert tbcDireccion != null : "fx:id=\"tbcDireccion\" was not injected: check your FXML file 'Cliente.fxml'.";
-        assert tbcDocumento != null : "fx:id=\"tbcDocumento\" was not injected: check your FXML file 'Cliente.fxml'.";
-        assert tbcEmail != null : "fx:id=\"tbcEmail\" was not injected: check your FXML file 'Cliente.fxml'.";
-        assert tbcEstado != null : "fx:id=\"tbcEstado\" was not injected: check your FXML file 'Cliente.fxml'.";
-        assert tbcNombre != null : "fx:id=\"tbcNombre\" was not injected: check your FXML file 'Cliente.fxml'.";
-        assert tbcTelefono != null : "fx:id=\"tbcTelefono\" was not injected: check your FXML file 'Cliente.fxml'.";
-        assert txtDireccion != null : "fx:id=\"txtDireccion\" was not injected: check your FXML file 'Cliente.fxml'.";
-        assert txtDocumento != null : "fx:id=\"txtDocumento\" was not injected: check your FXML file 'Cliente.fxml'.";
-        assert txtEmail != null : "fx:id=\"txtEmail\" was not injected: check your FXML file 'Cliente.fxml'.";
-        assert txtNombre != null : "fx:id=\"txtNombre\" was not injected: check your FXML file 'Cliente.fxml'.";
-        assert txtTelefono != null : "fx:id=\"txtTelefono\" was not injected: check your FXML file 'Cliente.fxml'.";
-
         if (App.taller == null) {
             System.err.println("No se puede agregar el taller");
             return;
         }
-
         clienteController = new ClienteController(App.taller);
         initView();
-
     }
 
     private void initView() {
-
-        initDataBinding();
+        setupColumnas();
+        setupFiltros();
         obtenerCliente();
-        tbCliente.getItems().clear();
-
-        // Agregar los elementos a la tabla
         tbCliente.setItems(listaCliente);
-
-        // Seleccionar elemento de la tabla
         listenerSelection();
     }
 
-    /**
-     * Método que configura el enlace entre los datos y la vista.
-     */
+    // ─── Configuración de columnas (MaterialFX estilo) ───────────────────────────
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    private void initDataBinding() {
-        tbcDireccion.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDireccion()));
-        tbcTelefono.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTelefonono()));
-        tbcDocumento.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDocumento()));
-        tbcEmail.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmail()));
-        tbcNombre.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNombre()));
-        tbcEstado.setCellValueFactory(celldata -> {
-            Estado categoria = celldata.getValue().getEstado();
-            String categoriaString = (categoria != null) ? categoria.toString() : "Sin Tipo";
-            return new SimpleStringProperty(categoriaString);
+    private void setupColumnas() {
+
+        MFXTableColumn<Cliente> colDocumento = new MFXTableColumn<>("Documento", true, Comparator.comparing(Cliente::getDocumento));
+        MFXTableColumn<Cliente> colNombre    = new MFXTableColumn<>("Nombre",    true, Comparator.comparing(Cliente::getNombre));
+        MFXTableColumn<Cliente> colTelefono  = new MFXTableColumn<>("Teléfono",  true, Comparator.comparing(Cliente::getTelefonono));
+        MFXTableColumn<Cliente> colEmail     = new MFXTableColumn<>("Email",     true, Comparator.comparing(Cliente::getEmail));
+        MFXTableColumn<Cliente> colDireccion = new MFXTableColumn<>("Dirección", true, Comparator.comparing(Cliente::getDireccion));
+        MFXTableColumn<Cliente> colEstado    = new MFXTableColumn<>("Estado",    true, Comparator.comparing(c -> c.getEstado().toString()));
+
+        colDocumento.setRowCellFactory(c -> new MFXTableRowCell<>(Cliente::getDocumento));
+        colNombre   .setRowCellFactory(c -> new MFXTableRowCell<>(Cliente::getNombre));
+        colTelefono .setRowCellFactory(c -> new MFXTableRowCell<>(Cliente::getTelefonono));
+        colEmail    .setRowCellFactory(c -> new MFXTableRowCell<>(Cliente::getEmail));
+        colDireccion.setRowCellFactory(c -> new MFXTableRowCell<>(Cliente::getDireccion));
+        colEstado   .setRowCellFactory(c -> {
+            MFXTableRowCell<Cliente, String> cell =
+                    new MFXTableRowCell<>(cl -> cl.getEstado() != null ? cl.getEstado().toString() : "");
+            cell.setAlignment(Pos.CENTER);
+            return cell;
         });
 
+        // Anchos proporcionales
+        colDocumento.setPrefWidth(110);
+        colNombre   .setPrefWidth(130);
+        colTelefono .setPrefWidth(100);
+        colEmail    .setPrefWidth(160);
+        colDireccion.setPrefWidth(140);
+        colEstado   .setPrefWidth(80);
+
+        tbCliente.getTableColumns().addAll(
+                colDocumento, colNombre, colTelefono, colEmail, colDireccion, colEstado
+        );
     }
 
-    /**
-     * Metodo que obtiene la lista de doctores del sistema.
-     */
+    /** Filtros de búsqueda que MaterialFX muestra en la barra superior de la tabla */
+    private void setupFiltros() {
+        tbCliente.getFilters().addAll(
+                new StringFilter<>("Documento", Cliente::getDocumento),
+                new StringFilter<>("Nombre",    Cliente::getNombre),
+                new StringFilter<>("Email",     Cliente::getEmail)
+        );
+    }
+
+    // ─── Listener de selección ───────────────────────────────────────────────────
+
+    private void listenerSelection() {
+        tbCliente.getSelectionModel().selectionProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal.isEmpty()) {
+                // MFXTableView devuelve un Map<Integer, Cliente>; tomamos el primer valor
+                selectedCliente = newVal.values().iterator().next();
+                mostrarInformacionCliente(selectedCliente);
+            }
+        });
+    }
+
+    // ─── Lógica de negocio ───────────────────────────────────────────────────────
 
     private void obtenerCliente() {
         if (clienteController != null) {
             listaCliente.addAll(clienteController.obtenerListacliente());
-        } else {
-            System.err.println("doctorController no está inicializado.");
         }
     }
-
-    /**
-     * Método que configura un listener para la selección de elementos en la tabla de doctores.
-     */
-
-    private void listenerSelection() {
-        tbCliente.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            selectedCliente = newSelection;
-            mostrarInformacionCliente(selectedCliente);
-        });
-    }
-
-    /**
-     * Metodo que muestra la información del doctor  seleccionado en el campo de texto.
-     */
 
     private void mostrarInformacionCliente(Cliente cliente) {
-        if (cliente != null) {
-            // Asignar valores a los campos de texto
-            txtDireccion.setText(cliente.getDireccion());
-            txtDocumento.setText(cliente.getDocumento());
-            txtEmail.setText(cliente.getEmail());
-            txtNombre.setText(cliente.getNombre());
-            txtTelefono.setText(cliente.getTelefonono());
-            cbxEstado.getSelectionModel().select(cliente.getEstado());
-        }
+        if (cliente == null) return;
+        txtDocumento.setText(cliente.getDocumento());
+        txtNombre   .setText(cliente.getNombre());
+        txtTelefono .setText(cliente.getTelefonono());
+        txtEmail    .setText(cliente.getEmail());
+        txtDireccion.setText(cliente.getDireccion());
+        cbxEstado.setValue(cliente.getEstado());
     }
-
-    /**
-     * Metodo que agrega un nuevo doctor a la lista y lo almacena en el controlador.
-     * Se crea un nuevo doctor a partir de los datos ingresados y se añade a la lista si la operación es exitosa.
-     */
 
     private void agregarCliente() {
         Cliente cliente = buildCliente();
-        if(clienteController.crearCliente(cliente)){
+        if (clienteController.crearCliente(cliente)) {
             listaCliente.add(cliente);
             limpiarCampos();
         }
     }
-
-    /**
-     * Metodo que construye un objeto de tipo doctor con la información ingresada.
-     * @return Un objeto Doctor con el código ingresado en el campo de texto.
-     */
-
-    private Cliente buildCliente() {
-        Cliente cliente = new Cliente(
-                txtDocumento.getText(),
-                txtNombre.getText(),
-                txtTelefono.getText(),
-                txtEmail.getText(),
-                txtDireccion.getText(),
-                cbxEstado.getValue()
-        );
-        return cliente;
-    }
-
-
-    /**
-     * Metodo que elimina el doctor seleccionado de la lista y del controlador.
-     * Si la eliminación es exitosa, también se eliminan los datos de la tabla y se limpian los campos de entrada.
-     */
 
     private void eliminarCliente() {
         if (clienteController.eliminarcliente(selectedCliente)) {
@@ -263,62 +173,51 @@ public class ClienteVC {
         }
     }
 
-    /**
-     * Metodo que actualiza la información del doctor seleccionado.
-     * Si el Doctor se encuentra en la lista y la actualización es exitosa,
-     * se reemplaza por el nuevo objeto actualizado y se refresca la tabla.
-     */
-
     private void actualizarCliente() {
-
         if (selectedCliente != null &&
                 clienteController.actualizarCliente(selectedCliente.getDocumento(), buildCliente())) {
-
             int index = listaCliente.indexOf(selectedCliente);
             if (index >= 0) {
                 listaCliente.set(index, buildCliente());
             }
-
-            tbCliente.refresh();
+            tbCliente.update();   // MFXTableView usa update() en lugar de refresh()
             limpiarSeleccion();
             limpiarCampos();
         }
     }
 
-    /**
-     * Metodo que limpia la selección de la tabla de doctor y los campos de entrada.
-     */
+    private Cliente buildCliente() {
+        return new Cliente(
+                txtDocumento.getText(),
+                txtNombre   .getText(),
+                txtTelefono .getText(),
+                txtEmail    .getText(),
+                txtDireccion.getText(),
+                cbxEstado   .getValue()
+        );
+    }
+
     private void limpiarSeleccion() {
         tbCliente.getSelectionModel().clearSelection();
         limpiarCampos();
     }
 
-    /**
-     * Metodo que limpia los campos de entrada y la selección de la tabla de Doctor.
-     */
     private void limpiarCampos() {
         txtDocumento.clear();
-        txtTelefono.clear();
-        txtEmail.clear();
+        txtNombre   .clear();
+        txtTelefono .clear();
+        txtEmail    .clear();
         txtDireccion.clear();
-        txtNombre.clear();
         cbxEstado.setValue(null);
+        selectedCliente = null;
     }
 
-    /**
-     * Establece la instancia de la aplicación para acceder a sus métodos.
-     * @param app
-     */
+    // ─── setApp ──────────────────────────────────────────────────────────────────
 
     public void setApp(App app) {
         this.app = app;
-
-        /**
-         * Metodo que inicializa la comboBox con las opciones de la especialidad del objeto Doctor
-         */
-
+        // El ComboBox de MFX se llena con setItems(), igual que el estándar
         ObservableList<Estado> options = FXCollections.observableArrayList(Estado.values());
-        cbxEstado.setItems((options));
+        cbxEstado.setItems(options);
     }
-
 }

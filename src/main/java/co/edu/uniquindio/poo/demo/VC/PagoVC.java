@@ -2,25 +2,26 @@ package co.edu.uniquindio.poo.demo.VC;
 
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.ResourceBundle;
 
 import co.edu.uniquindio.poo.demo.App;
 import co.edu.uniquindio.poo.demo.Back.Pago;
-import co.edu.uniquindio.poo.demo.Back.Estado;
-import co.edu.uniquindio.poo.demo.Back.Pago;
 import co.edu.uniquindio.poo.demo.Controller.PagoController;
-import co.edu.uniquindio.poo.demo.Controller.PagoController;
-import javafx.beans.property.SimpleStringProperty;
+
+import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXComboBox;
+import io.github.palexdev.materialfx.controls.MFXDatePicker;
+import io.github.palexdev.materialfx.controls.MFXTableColumn;
+import io.github.palexdev.materialfx.controls.MFXTableView;
+import io.github.palexdev.materialfx.controls.MFXTextField;
+import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
+import io.github.palexdev.materialfx.filter.StringFilter;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 
 public class PagoVC {
 
@@ -29,287 +30,137 @@ public class PagoVC {
     private ObservableList<Pago> listaPago = FXCollections.observableArrayList();
     private Pago selectedPago;
 
-    @FXML
-    private ResourceBundle resources;
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-    @FXML
-    private URL location;
+    @FXML private ResourceBundle resources;
+    @FXML private URL location;
 
-    @FXML
-    private Button bttAgregarPago;
+    @FXML private MFXButton bttAgregarPago;
+    @FXML private MFXButton bttEliminarPago;
+    @FXML private MFXButton bttLimpiarPago;
+    @FXML private MFXButton bttModificarPago;
+    @FXML private MFXButton bttVolver;
 
-    @FXML
-    private Button bttEliminarPago;
+    @FXML private MFXComboBox<Pago.EstadoPago>  cbxEstado;
+    @FXML private MFXComboBox<Pago.MetodoPago>  cbxMetodo;
+    @FXML private MFXDatePicker                  dpFecha;
+    @FXML private MFXTableView<Pago>             tbPago;
+    @FXML private MFXTextField                   txtID;
 
-    @FXML
-    private Button bttLimpiarPago;
-
-    @FXML
-    private Button bttModificarPago;
-
-    @FXML
-    private Button bttVolver;
-
-    @FXML
-    private ComboBox<Pago.EstadoPago> cbxEstado;
-
-    @FXML
-    private ComboBox<Pago.MetodoPago> cbxMetodo;
-
-    @FXML
-    private DatePicker dpFecha;
-
-    @FXML
-    private TableView<Pago> tbPago;
-
-    @FXML
-    private TableColumn<Pago, String> tbcEstado;
-
-    @FXML
-    private TableColumn<Pago, String> tbcFecha;
-
-    @FXML
-    private TableColumn<Pago, String> tbcID;
-
-    @FXML
-    private TableColumn<Pago, String> tbcMetodo;
-
-    @FXML
-    private TextField txtID;
-
-    @FXML
-    void AgregarPago(ActionEvent event) {
-        agregarPago();
-    }
-
-    @FXML
-    void EliminarPago(ActionEvent event) {
-        eliminarPago();
-    }
-
-    @FXML
-    void LimpiarPago(ActionEvent event) {
-        limpiarCampos();
-    }
-
-    @FXML
-    void ModificarPago(ActionEvent event) {
-        actualizarPago();
-    }
-
-    @FXML
-    void Volver(ActionEvent event) {
-        try {
-            app.openViewPrincipal();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    @FXML void AgregarPago(ActionEvent event)  { agregarPago(); }
+    @FXML void EliminarPago(ActionEvent event) { eliminarPago(); }
+    @FXML void LimpiarPago(ActionEvent event)  { limpiarCampos(); }
+    @FXML void ModificarPago(ActionEvent event){ actualizarPago(); }
+    @FXML void Volver(ActionEvent event) {
+        try { app.MenuAdmin(); } catch (Exception e) { e.printStackTrace(); }
     }
 
     @FXML
     void initialize() {
-        assert bttAgregarPago != null : "fx:id=\"bttAgregarPago\" was not injected: check your FXML file 'Pago.fxml'.";
-        assert bttEliminarPago != null : "fx:id=\"bttEliminarPago\" was not injected: check your FXML file 'Pago.fxml'.";
-        assert bttLimpiarPago != null : "fx:id=\"bttLimpiarPago\" was not injected: check your FXML file 'Pago.fxml'.";
-        assert bttModificarPago != null : "fx:id=\"bttModificarPago\" was not injected: check your FXML file 'Pago.fxml'.";
-        assert bttVolver != null : "fx:id=\"bttVolver\" was not injected: check your FXML file 'Pago.fxml'.";
-        assert cbxEstado != null : "fx:id=\"cbxEstado\" was not injected: check your FXML file 'Pago.fxml'.";
-        assert cbxMetodo != null : "fx:id=\"cbxMetodo\" was not injected: check your FXML file 'Pago.fxml'.";
-        assert dpFecha != null : "fx:id=\"dpFecha\" was not injected: check your FXML file 'Pago.fxml'.";
-        assert tbPago != null : "fx:id=\"tbPago\" was not injected: check your FXML file 'Pago.fxml'.";
-        assert tbcEstado != null : "fx:id=\"tbcEstado\" was not injected: check your FXML file 'Pago.fxml'.";
-        assert tbcFecha != null : "fx:id=\"tbcFecha\" was not injected: check your FXML file 'Pago.fxml'.";
-        assert tbcID != null : "fx:id=\"tbcID\" was not injected: check your FXML file 'Pago.fxml'.";
-        assert tbcMetodo != null : "fx:id=\"tbcMetodo\" was not injected: check your FXML file 'Pago.fxml'.";
-        assert txtID != null : "fx:id=\"txtID\" was not injected: check your FXML file 'Pago.fxml'.";
-
-        if (App.taller == null) {
-            System.err.println("No se puede agregar el taller");
-            return;
-        }
-
+        if (App.taller == null) { System.err.println("Taller null"); return; }
         pagocontroller = new PagoController(App.taller);
-        initView();
-
-    }
-
-    private void initView() {
-
-        initDataBinding();
+        setupColumnas();
+        setupFiltros();
         obtenerPago();
-        tbPago.getItems().clear();
-
-        // Agregar los elementos a la tabla
         tbPago.setItems(listaPago);
-
-        // Seleccionar elemento de la tabla
         listenerSelection();
     }
 
-    /**
-     * Método que configura el enlace entre los datos y la vista.
-     */
+    private void setupColumnas() {
+        MFXTableColumn<Pago> colID     = new MFXTableColumn<>("ID",     true, Comparator.comparing(Pago::getIdPago));
+        MFXTableColumn<Pago> colFecha  = new MFXTableColumn<>("Fecha",  true, Comparator.comparing(Pago::getFechaPago));
+        MFXTableColumn<Pago> colMetodo = new MFXTableColumn<>("Método", true, Comparator.comparing(p -> p.getMetodo().toString()));
+        MFXTableColumn<Pago> colEstado = new MFXTableColumn<>("Estado", true, Comparator.comparing(p -> p.getEstado().toString()));
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    private void initDataBinding() {
-        tbcID.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getIdPago()));
-        tbcEstado.setCellValueFactory(celldata -> {
-            Pago.EstadoPago categoria = celldata.getValue().getEstado();
-            String categoriaString = (categoria != null) ? categoria.toString() : "Sin Tipo";
-            return new SimpleStringProperty(categoriaString);
-        });
-        tbcMetodo.setCellValueFactory(celldata -> {
-            Pago.MetodoPago categoria = celldata.getValue().getMetodo();
-            String categoriaString = (categoria != null) ? categoria.toString() : "Sin Tipo";
-            return new SimpleStringProperty(categoriaString);
-        });
-        tbcFecha.setCellValueFactory(cellData ->
-                new SimpleStringProperty(
-                        cellData.getValue().getFechaPago().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-                )
+        colID    .setRowCellFactory(p -> new MFXTableRowCell<>(Pago::getIdPago));
+        colFecha .setRowCellFactory(p -> new MFXTableRowCell<>(pa -> pa.getFechaPago().format(FORMATTER)));
+        colMetodo.setRowCellFactory(p -> new MFXTableRowCell<>(pa -> pa.getMetodo() != null ? pa.getMetodo().toString() : ""));
+        colEstado.setRowCellFactory(p -> new MFXTableRowCell<>(pa -> pa.getEstado() != null ? pa.getEstado().toString() : ""));
+
+        colID    .setPrefWidth(100);
+        colFecha .setPrefWidth(120);
+        colMetodo.setPrefWidth(120);
+        colEstado.setPrefWidth(120);
+
+        tbPago.getTableColumns().addAll(colID, colFecha, colMetodo, colEstado);
+    }
+
+    private void setupFiltros() {
+        tbPago.getFilters().addAll(
+                new StringFilter<>("ID", Pago::getIdPago)
         );
-
     }
-
-    /**
-     * Metodo que obtiene la lista de doctores del sistema.
-     */
-
-    private void obtenerPago() {
-        if (pagocontroller != null) {
-            listaPago.addAll(pagocontroller.obtenerListapago());
-        } else {
-            System.err.println("doctorController no está inicializado.");
-        }
-    }
-
-    /**
-     * Método que configura un listener para la selección de elementos en la tabla de doctores.
-     */
 
     private void listenerSelection() {
-        tbPago.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            selectedPago = newSelection;
-            mostrarInformacionPago(selectedPago);
+        tbPago.getSelectionModel().selectionProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal.isEmpty()) {
+                selectedPago = newVal.values().iterator().next();
+                mostrarInformacionPago(selectedPago);
+            }
         });
     }
 
-    /**
-     * Metodo que muestra la información del doctor  seleccionado en el campo de texto.
-     */
-
-    private void mostrarInformacionPago(Pago Pago) {
-        if (Pago != null) {
-            // Asignar valores a los campos de texto
-            txtID.setText(Pago.getIdPago());
-            dpFecha.setValue(Pago.getFechaPago());
-            cbxEstado.getSelectionModel().select(Pago.getEstado());
-            cbxMetodo.getSelectionModel().select(Pago.getMetodo());
-        }
+    private void obtenerPago() {
+        if (pagocontroller != null)
+            listaPago.addAll(pagocontroller.obtenerListapago());
     }
 
-    /**
-     * Metodo que agrega un nuevo doctor a la lista y lo almacena en el controlador.
-     * Se crea un nuevo doctor a partir de los datos ingresados y se añade a la lista si la operación es exitosa.
-     */
+    private void mostrarInformacionPago(Pago p) {
+        if (p == null) return;
+        txtID.setText(p.getIdPago());
+        dpFecha.setValue(p.getFechaPago());
+        cbxEstado.setValue(p.getEstado());
+        cbxMetodo.setValue(p.getMetodo());
+    }
 
     private void agregarPago() {
-        Pago Pago = buildPago();
-        if(pagocontroller.crearpago(Pago)){
-            listaPago.add(Pago);
+        Pago p = buildPago();
+        if (pagocontroller.crearpago(p)) {
+            listaPago.add(p);
             limpiarCampos();
         }
     }
 
-    /**
-     * Metodo que construye un objeto de tipo doctor con la información ingresada.
-     * @return Un objeto Doctor con el código ingresado en el campo de texto.
-     */
-
-    private Pago buildPago() {
-        Pago Pago = new Pago(
-                txtID.getText(),
-                dpFecha.getValue(),
-                cbxMetodo.getValue(),
-                cbxEstado.getValue()
-        );
-        return Pago;
-    }
-
-
-    /**
-     * Metodo que elimina el doctor seleccionado de la lista y del controlador.
-     * Si la eliminación es exitosa, también se eliminan los datos de la tabla y se limpian los campos de entrada.
-     */
-
     private void eliminarPago() {
-        if (pagocontroller.eliminarpago(selectedPago)) {
+        if (selectedPago != null && pagocontroller.eliminarpago(selectedPago)) {
             listaPago.remove(selectedPago);
             limpiarCampos();
             limpiarSeleccion();
         }
     }
 
-    /**
-     * Metodo que actualiza la información del doctor seleccionado.
-     * Si el Doctor se encuentra en la lista y la actualización es exitosa,
-     * se reemplaza por el nuevo objeto actualizado y se refresca la tabla.
-     */
-
     private void actualizarPago() {
-
         if (selectedPago != null &&
                 pagocontroller.actualizarpago(selectedPago.getIdPago(), buildPago())) {
-
             int index = listaPago.indexOf(selectedPago);
-            if (index >= 0) {
-                listaPago.set(index, buildPago());
-            }
-
-            tbPago.refresh();
+            if (index >= 0) listaPago.set(index, buildPago());
+            tbPago.update();
             limpiarSeleccion();
             limpiarCampos();
         }
     }
 
-    /**
-     * Metodo que limpia la selección de la tabla de doctor y los campos de entrada.
-     */
+    private Pago buildPago() {
+        return new Pago(txtID.getText(), dpFecha.getValue(), cbxMetodo.getValue(), cbxEstado.getValue());
+    }
+
     private void limpiarSeleccion() {
         tbPago.getSelectionModel().clearSelection();
         limpiarCampos();
     }
 
-    /**
-     * Metodo que limpia los campos de entrada y la selección de la tabla de Doctor.
-     */
     private void limpiarCampos() {
         txtID.clear();
         dpFecha.setValue(null);
         cbxEstado.setValue(null);
         cbxMetodo.setValue(null);
+        selectedPago = null;
     }
-
-    /**
-     * Establece la instancia de la aplicación para acceder a sus métodos.
-     * @param app
-     */
 
     public void setApp(App app) {
         this.app = app;
-
-        /**
-         * Metodo que inicializa la comboBox con las opciones de la especialidad del objeto Doctor
-         */
-
-        ObservableList<Pago.EstadoPago> options = FXCollections.observableArrayList(Pago.EstadoPago.values());
-        cbxEstado.setItems((options));
-
-        ObservableList<Pago.MetodoPago> options2 = FXCollections.observableArrayList(Pago.MetodoPago.values());
-        cbxMetodo.setItems((options2));
-
-
+        cbxEstado.setItems(FXCollections.observableArrayList(Pago.EstadoPago.values()));
+        cbxMetodo.setItems(FXCollections.observableArrayList(Pago.MetodoPago.values()));
     }
-
 }
 

@@ -539,6 +539,19 @@ public class Taller {
         servicios.removeIf(s -> s.getEstadoServicio().equals(Servicio.EstadoServicio.Cancelado));
     }
 
+    public int contarServiciosPorMecanico(String documentoMecanico) {
+        int contador = 0;
+        for (Orden s : ordenes) {
+            for (Mecanico m : s.getMecanicos()) {
+                if (m.getDocumento().equals(documentoMecanico)) {
+                    contador++;break;
+                }
+            }
+        }
+        return contador;
+    }
+
+
 
 
 

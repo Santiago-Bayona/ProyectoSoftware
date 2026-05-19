@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.Pane?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="278.0" prefWidth="438.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.poo.demo.VC.MenuEmpleadoVC">
+    <children>
+        <Label layoutX="145.0" layoutY="23.0" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #34485c;" text="Taller Mecanico" />
+        <MFXButton fx:id="bttOrden" buttonType="RAISED" depthLevel="LEVEL4" layoutX="69.0" layoutY="229.0" mnemonicParsing="false" onAction="#AbirOrden" prefHeight="25.0" prefWidth="69.0" style="-fx-background-color: #34485c; -fx-text-fill: white" text="Orden" />
+        <MFXButton fx:id="bttPago" buttonType="RAISED" depthLevel="LEVEL4" layoutX="70.0" layoutY="118.0" mnemonicParsing="false" onAction="#AbrirPago" prefHeight="25.0" prefWidth="67.0" style="-fx-background-color: #34485c; -fx-text-fill: white" text="Pago" />
+        <MFXButton fx:id="bttRepuesto" buttonType="RAISED" depthLevel="LEVEL4" layoutX="328.0" layoutY="118.0" mnemonicParsing="false" onAction="#AbrirRepuesto" prefHeight="25.0" prefWidth="69.0" style="-fx-background-color: #34485c; -fx-text-fill: white" text="Repuesto" />
+        <MFXButton fx:id="bttServicio" buttonType="RAISED" depthLevel="LEVEL4" layoutX="205.0" layoutY="171.0" mnemonicParsing="false" onAction="#AbrirServicio" prefHeight="25.0" prefWidth="67.0" style="-fx-background-color: #34485c; -fx-text-fill: white" text="Servicio" />
+        <MFXButton fx:id="bttVehiculo" buttonType="RAISED" depthLevel="LEVEL4" layoutX="328.0" layoutY="229.0" mnemonicParsing="false" onAction="#AbrirVehiculo" prefHeight="25.0" prefWidth="69.0" style="-fx-background-color: #34485c; -fx-text-fill: white" text="Vehiculo" />
+    </children>
+</Pane>

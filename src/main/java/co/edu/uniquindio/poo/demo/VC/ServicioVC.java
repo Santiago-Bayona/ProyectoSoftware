@@ -1,370 +1,220 @@
 package co.edu.uniquindio.poo.demo.VC;
 
 import java.net.URL;
-import java.time.format.DateTimeFormatter;
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import co.edu.uniquindio.poo.demo.App;
-import co.edu.uniquindio.poo.demo.Back.*;
+import co.edu.uniquindio.poo.demo.Back.Orden;
+import co.edu.uniquindio.poo.demo.Back.Repuesto;
+import co.edu.uniquindio.poo.demo.Back.Servicio;
 import co.edu.uniquindio.poo.demo.Controller.ServicioController;
-import co.edu.uniquindio.poo.demo.Controller.ServicioController;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
+
+import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXComboBox;
+import io.github.palexdev.materialfx.controls.MFXTableColumn;
+import io.github.palexdev.materialfx.controls.MFXTableView;
+import io.github.palexdev.materialfx.controls.MFXTextField;
+import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
+import io.github.palexdev.materialfx.filter.StringFilter;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.TextArea;
 
 public class ServicioVC {
 
     App app;
     ServicioController servicioController;
-    private ObservableList<Servicio> listaServicio = FXCollections.observableArrayList();
-    private ObservableList<Orden> listaOrden = FXCollections.observableArrayList();
-    private ObservableList<Repuesto> listaRepuestos = FXCollections.observableArrayList();
+    private ObservableList<Servicio>  listaServicio  = FXCollections.observableArrayList();
+    private ObservableList<Orden>     listaOrden     = FXCollections.observableArrayList();
+    private ObservableList<Repuesto>  listaRepuestos = FXCollections.observableArrayList();
     private Servicio selectedServicio;
-    private Repuesto selectedRepuesto;
-    private Orden selectedOrden;
+    private Orden    selectedOrden;
 
+    @FXML private ResourceBundle resources;
+    @FXML private URL location;
 
+    @FXML private MFXButton bttAgregarServicio;
+    @FXML private MFXButton bttEliminarServicio;
+    @FXML private MFXButton bttLimpiarServicio;
+    @FXML private MFXButton bttModificarServicio;
+    @FXML private MFXButton bttVolver;
 
-    @FXML
-    private ResourceBundle resources;
+    @FXML private MFXComboBox<Servicio.EstadoServicio> cbxEstado;
+    @FXML private MFXTextField txtID;
+    @FXML private MFXTextField txtPrecioMO;
+    @FXML private TextArea     txtDescripcion;
 
-    @FXML
-    private URL location;
+    @FXML private MFXTableView<Servicio>  tbServicio;
+    @FXML private MFXTableView<Orden>     tbOrden;
+    @FXML private MFXTableView<Repuesto>  tbRepuestos;
 
-    @FXML
-    private Button bttAgregarServicio;
-
-    @FXML
-    private Button bttEliminarServicio;
-
-    @FXML
-    private Button bttLimpiarServicio;
-
-    @FXML
-    private Button bttModificarServicio;
-
-    @FXML
-    private Button bttVolver;
-
-    @FXML
-    private ComboBox<Servicio.EstadoServicio> cbxEstado;
-
-    @FXML
-    private TableColumn<Orden, String> tbIDOrden;
-
-    @FXML
-    private TableColumn<Repuesto, String> tbNombreRepuestos;
-
-    @FXML
-    private TableView<Servicio> tbServicio;
-
-    @FXML
-    private TableView<Repuesto> tbRepuestos;
-
-    @FXML
-    private TableView<Orden> tbOrden;
-
-    @FXML
-    private TableColumn<Servicio, String> tbcEstado;
-
-    @FXML
-    private TableColumn<Servicio, String > tbcID;
-
-    @FXML
-    private TableColumn<Servicio, String> tbcOrden;
-
-    @FXML
-    private TableColumn<Servicio, Double> tbcPrecioMO;
-
-    @FXML
-    private TableColumn<Servicio, Double> tbcPrecioR;
-
-    @FXML
-    private TableColumn<Servicio, String> tbcRepuestos;
-
-    @FXML
-    private TextArea txtDescripcion;
-
-    @FXML
-    private TextField txtID;
-
-    @FXML
-    private TextField txtPrecioMO;
-
-    @FXML
-    void AgregarServicio(ActionEvent event) {
-        agregarServicio();
-    }
-
-    @FXML
-    void EliminarServicio(ActionEvent event) {
-            eliminarServicio();
-    }
-
-    @FXML
-    void LimpiarServicio(ActionEvent event) {
-        limpiarCampos();
-    }
-
-    @FXML
-    void ModificarServicio(ActionEvent event) {
-        modificarServicio();
-    }
-
-    @FXML
-    void Volver(ActionEvent event) {
-        try{
-            app.openViewPrincipal();
-        } catch(Exception e){
-            e.printStackTrace();
-        }
+    @FXML void AgregarServicio(ActionEvent event)  { agregarServicio(); }
+    @FXML void EliminarServicio(ActionEvent event) { eliminarServicio(); }
+    @FXML void LimpiarServicio(ActionEvent event)  { limpiarCampos(); }
+    @FXML void ModificarServicio(ActionEvent event){ modificarServicio(); }
+    @FXML void Volver(ActionEvent event) {
+        try { app.MenuAdmin(); } catch (Exception e) { e.printStackTrace(); }
     }
 
     @FXML
     void initialize() {
-        assert bttAgregarServicio != null : "fx:id=\"bttAgregarServicio\" was not injected: check your FXML file 'Servicio.fxml'.";
-        assert bttEliminarServicio != null : "fx:id=\"bttEliminarServicio\" was not injected: check your FXML file 'Servicio.fxml'.";
-        assert bttLimpiarServicio != null : "fx:id=\"bttLimpiarServicio\" was not injected: check your FXML file 'Servicio.fxml'.";
-        assert bttModificarServicio != null : "fx:id=\"bttModificarServicio\" was not injected: check your FXML file 'Servicio.fxml'.";
-        assert bttVolver != null : "fx:id=\"bttVolver\" was not injected: check your FXML file 'Servicio.fxml'.";
-        assert cbxEstado != null : "fx:id=\"cbxEstado\" was not injected: check your FXML file 'Servicio.fxml'.";
-        assert tbOrden != null : "fx:id=\"tbIDServicio\" was not injected: check your FXML file 'Servicio.fxml'.";
-        assert tbNombreRepuestos != null : "fx:id=\"tbNombreRepuestos\" was not injected: check your FXML file 'Servicio.fxml'.";
-        assert tbServicio != null : "fx:id=\"tbServicio\" was not injected: check your FXML file 'Servicio.fxml'.";
-        assert tbRepuestos != null : "fx:id=\"tbRepuestos\" was not injected: check your FXML file 'Servicio.fxml'.";
-        assert tbIDOrden != null : "fx:id=\"tbServicio\" was not injected: check your FXML file 'Servicio.fxml'.";
-        assert tbcEstado != null : "fx:id=\"tbcEstado\" was not injected: check your FXML file 'Servicio.fxml'.";
-        assert tbcID != null : "fx:id=\"tbcID\" was not injected: check your FXML file 'Servicio.fxml'.";
-        assert tbcOrden != null : "fx:id=\"tbcServicio\" was not injected: check your FXML file 'Servicio.fxml'.";
-        assert tbcPrecioMO != null : "fx:id=\"tbcPrecioMO\" was not injected: check your FXML file 'Servicio.fxml'.";
-        assert tbcPrecioR != null : "fx:id=\"tbcPrecioR\" was not injected: check your FXML file 'Servicio.fxml'.";
-        assert tbcRepuestos != null : "fx:id=\"tbcRepuestos\" was not injected: check your FXML file 'Servicio.fxml'.";
-        assert txtDescripcion != null : "fx:id=\"txtDescripcion\" was not injected: check your FXML file 'Servicio.fxml'.";
-        assert txtID != null : "fx:id=\"txtID\" was not injected: check your FXML file 'Servicio.fxml'.";
-        assert txtPrecioMO != null : "fx:id=\"txtPrecioMO\" was not injected: check your FXML file 'Servicio.fxml'.";
-
-        if (App.taller == null) {
-            System.err.println("No se puede agregar el taller");
-            return;
-        }
-
+        if (App.taller == null) { System.err.println("Taller null"); return; }
         servicioController = new ServicioController(App.taller);
-        obtenerOrden();
-        obtenerServicio();
+
+        obtenerOrdenes();
         obtenerRepuestos();
-        initView();
-        
-    }
+        obtenerServicios();
 
-    private void obtenerRepuestos() {
-        if (listaRepuestos == null) {
-            listaRepuestos = FXCollections.observableArrayList();
-        }
+        setupColumnasServicio();
+        setupColumnasOrden();
+        setupColumnasRepuestos();
+        setupFiltros();
 
-        Collection<Repuesto> repuestos = servicioController.obtenerListaRepuestos();
-        if (repuestos != null) {
-            listaRepuestos.setAll(repuestos);
-        } else {
-            System.out.println("No se encontraron mecánicos.");
-        }
-    }
-
-
-    private void obtenerOrden() {
-        if (listaOrden == null) {
-            listaOrden = FXCollections.observableArrayList();
-        }
-
-        Collection<Orden> ordenes = servicioController.obtenerListaOrden();
-        if (ordenes != null) {
-            listaOrden.setAll(ordenes);
-        } else {
-            System.out.println("No se encontraron jugadpres.");
-        }
-    }
-
-
-    /**
-     *Metodo que permite obtener los datos de paciente
-     */
-    private void obtenerServicio() {
-        if (servicioController != null) {
-            Collection<Servicio> ords = servicioController.obtenerListaServicio();
-            if (ords != null) {
-                listaServicio.clear();
-                listaServicio.addAll(ords);
-            }
-        } else {
-            System.err.println("PacienteController no está inicializado.");
-        }
-    }
-
-
-    /**
-     *Metodo que inicializa la vista en javaFX
-     */
-    private void initView() {
-        initDataBinding();
-        tbServicio.getItems().clear();
-        tbServicio.setItems(listaServicio);
-        tbOrden.setItems(listaOrden);
+        tbServicio .setItems(listaServicio);
+        tbOrden    .setItems(listaOrden);
         tbRepuestos.setItems(listaRepuestos);
-        tbRepuestos.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+        tbRepuestos.getSelectionModel().setAllowsMultipleSelection(true);
 
         listenerSelectionServicio();
-        listenerSelectionRepuesto();
         listenerSelectionOrden();
     }
 
+    // ─── Columnas ────────────────────────────────────────────────────────────────
 
-    /**
-     *Metodo que configura la vinculacion de datos en las tablas
-     */
-    private void initDataBinding() {
-        tbcID.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getIdServicio()));
-        tbcOrden.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getOrden().getIdOrden()));
-        tbcPrecioMO.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getPrecioManoObra()));
-        tbcPrecioR.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().calcularPrecioRepuestos()));
-        tbNombreRepuestos.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNombre()));
-        tbcRepuestos.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getNombresRepuestos())
+    private void setupColumnasServicio() {
+        MFXTableColumn<Servicio> colID      = new MFXTableColumn<>("ID",               true, Comparator.comparing(Servicio::getIdServicio));
+        MFXTableColumn<Servicio> colMO      = new MFXTableColumn<>("Precio MO",        true, Comparator.comparingDouble(Servicio::getPrecioManoObra));
+        MFXTableColumn<Servicio> colEstado  = new MFXTableColumn<>("Estado",           true, Comparator.comparing(s -> s.getEstadoServicio().toString()));
+        MFXTableColumn<Servicio> colOrden   = new MFXTableColumn<>("Orden",            true, Comparator.comparing(s -> s.getOrden().getIdOrden()));
+        MFXTableColumn<Servicio> colReps    = new MFXTableColumn<>("Repuestos",        false, null);
+        MFXTableColumn<Servicio> colPrecioR = new MFXTableColumn<>("Precio Repuestos", true, Comparator.comparingDouble(Servicio::getPrecioRepuestos));
+
+        colID     .setRowCellFactory(s -> new MFXTableRowCell<>(Servicio::getIdServicio));
+        colMO     .setRowCellFactory(s -> new MFXTableRowCell<>(sv -> String.valueOf(sv.getPrecioManoObra())));
+        colEstado .setRowCellFactory(s -> new MFXTableRowCell<>(sv -> sv.getEstadoServicio() != null ? sv.getEstadoServicio().toString() : ""));
+        colOrden  .setRowCellFactory(s -> new MFXTableRowCell<>(sv -> sv.getOrden().getIdOrden()));
+        colReps   .setRowCellFactory(s -> new MFXTableRowCell<>(Servicio::getNombresRepuestos));
+        colPrecioR.setRowCellFactory(s -> new MFXTableRowCell<>(sv -> String.valueOf(sv.calcularPrecioRepuestos())));
+
+        colID     .setPrefWidth(70);
+        colMO     .setPrefWidth(90);
+        colEstado .setPrefWidth(110);
+        colOrden  .setPrefWidth(80);
+        colReps   .setPrefWidth(160);
+        colPrecioR.setPrefWidth(120);
+
+        tbServicio.getTableColumns().addAll(colID, colMO, colEstado, colOrden, colReps, colPrecioR);
+    }
+
+    private void setupColumnasOrden() {
+        MFXTableColumn<Orden> colID    = new MFXTableColumn<>("ID Orden",  true, Comparator.comparing(Orden::getIdOrden));
+        MFXTableColumn<Orden> colPlaca = new MFXTableColumn<>("Vehículo",  true, Comparator.comparing(o -> o.getVehiculo().getPlaca()));
+
+        colID   .setRowCellFactory(o -> new MFXTableRowCell<>(Orden::getIdOrden));
+        colPlaca.setRowCellFactory(o -> new MFXTableRowCell<>(or -> or.getVehiculo().getPlaca()));
+
+        colID   .setPrefWidth(120);
+        colPlaca.setPrefWidth(120);
+
+        tbOrden.getTableColumns().addAll(colID, colPlaca);
+    }
+
+    private void setupColumnasRepuestos() {
+        MFXTableColumn<Repuesto> colNom    = new MFXTableColumn<>("Nombre", true, Comparator.comparing(Repuesto::getNombre));
+        MFXTableColumn<Repuesto> colStock  = new MFXTableColumn<>("Stock",  true, Comparator.comparingInt(Repuesto::getStock));
+
+        colNom  .setRowCellFactory(r -> new MFXTableRowCell<>(Repuesto::getNombre));
+        colStock.setRowCellFactory(r -> new MFXTableRowCell<>(re -> String.valueOf(re.getStock())));
+
+        colNom  .setPrefWidth(170);
+        colStock.setPrefWidth(70);
+
+        tbRepuestos.getTableColumns().addAll(colNom, colStock);
+    }
+
+    private void setupFiltros() {
+        tbServicio.getFilters().addAll(
+                new StringFilter<>("ID", Servicio::getIdServicio)
         );
-        tbIDOrden.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getIdOrden()));
-        tbcEstado.setCellValueFactory(celldata -> {
-            Servicio.EstadoServicio categoria = celldata.getValue().getEstadoServicio();
-            String categoriaString = (categoria != null) ? categoria.toString() : "Sin Tipo";
-            return new SimpleStringProperty(categoriaString);
-        });
-
-
     }
 
-    /**
-     *Metodo que escucha los cambios en la selecion de paciente y actualiza la variable selectedPaciente
-     */
+    // ─── Listeners ───────────────────────────────────────────────────────────────
+
     private void listenerSelectionServicio() {
-        tbServicio.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            selectedServicio = newSelection;
-            mostarInformacionServicio(selectedServicio);
+        tbServicio.getSelectionModel().selectionProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal.isEmpty()) {
+                selectedServicio = newVal.values().iterator().next();
+                mostrarInformacionServicio(selectedServicio);
+            }
         });
     }
-
 
     private void listenerSelectionOrden() {
-        tbOrden.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            selectedOrden = newSelection;
+        tbOrden.getSelectionModel().selectionProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal.isEmpty())
+                selectedOrden = newVal.values().iterator().next();
         });
     }
 
-    private void listenerSelectionRepuesto() {
-        tbRepuestos.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            selectedRepuesto = newSelection;
-        });
+    // ─── Carga de datos ──────────────────────────────────────────────────────────
+
+    private void obtenerServicios() {
+        Collection<Servicio> svs = servicioController.obtenerListaServicio();
+        if (svs != null) listaServicio.setAll(svs);
     }
 
+    private void obtenerOrdenes() {
+        Collection<Orden> ords = servicioController.obtenerListaOrden();
+        if (ords != null) listaOrden.setAll(ords);
+    }
 
-    /**
-     *Metodo que muestra la información del paciente sleccionado en los campos de la interfaz
-     * @param Servicio
-     */
-    private void mostarInformacionServicio(Servicio Servicio) {
-        if (Servicio != null) {
-            txtID.setText(Servicio.getIdServicio());
-            txtDescripcion.setText(Servicio.getDescripcion());
-            txtPrecioMO.setText(String.valueOf(Servicio.getPrecioManoObra()));
-            cbxEstado.setValue(Servicio.getEstadoServicio());
+    private void obtenerRepuestos() {
+        Collection<Repuesto> reps = servicioController.obtenerListaRepuestos();
+        if (reps != null) listaRepuestos.setAll(reps);
+    }
 
-            // Selecciona automáticamente los mecánicos de la Servicio en la tabla
-            tbRepuestos.getSelectionModel().clearSelection();
-            for (Repuesto repuesto : Servicio.getRepuestos()) {
-                int index = listaRepuestos.indexOf(repuesto);
-                if (index >= 0) {
-                    tbRepuestos.getSelectionModel().select(index);
-                }
-            }
+    // ─── Mostrar información ─────────────────────────────────────────────────────
+
+    private void mostrarInformacionServicio(Servicio s) {
+        if (s == null) return;
+        txtID         .setText(s.getIdServicio());
+        txtPrecioMO   .setText(String.valueOf(s.getPrecioManoObra()));
+        txtDescripcion.setText(s.getDescripcion());
+        cbxEstado.setValue(s.getEstadoServicio());
+
+        tbRepuestos.getSelectionModel().clearSelection();
+        for (Repuesto r : s.getRepuestos()) {
+            int index = listaRepuestos.indexOf(r);
+            if (index >= 0) tbRepuestos.getSelectionModel().selectIndex(index);
         }
     }
 
-    /**
-     *Metodo que agrega un paciente
-     */
+    // ─── CRUD ────────────────────────────────────────────────────────────────────
+
     private void agregarServicio() {
-        // Validar que se haya seleccionado un vehículo
-        if (selectedOrden == null) {
-            System.err.println("Error: Debe seleccionar un vehículo.");
+        if (selectedOrden == null || txtID.getText().isEmpty() || cbxEstado.getValue() == null) {
+            System.err.println("Datos incompletos.");
             return;
         }
-
-        // Validar que se haya ingresado un ID
-        if (txtID.getText().isEmpty()) {
-            System.err.println("Error: Debe ingresar un ID de Servicio.");
-            return;
-        }
-
-        // Validar que se haya seleccionado una fecha
-        if (cbxEstado.getValue() == null) {
-            System.err.println("Error: Debe seleccionar una fecha.");
-            return;
-        }
-
-        Servicio servicio = buildServicio();
-
-        if (servicio != null) {
-
-            servicio.descontarStockRepuestos();
-
-            if (servicioController.crearServicio(servicio)) {
-                listaServicio.add(servicio);
+        Servicio s = buildServicio();
+        if (s != null) {
+            s.descontarStockRepuestos();
+            if (servicioController.crearServicio(s)) {
+                listaServicio.add(s);
                 limpiarCampos();
             }
         }
     }
 
-    /**
-     *Metodo que crea una instancia de Paciente con los datos ingresados en la interfaz
-     * @return
-     */
-    private Servicio buildServicio() {
-        if (selectedOrden == null || txtID.getText().isEmpty() || cbxEstado.getValue() == null) {
-            System.err.println("Error: Datos incompletos.");
-            return null;
-        }
-        Double precio = Double.parseDouble(txtPrecioMO.getText());
-
-        Servicio Servicio = new Servicio(
-                txtID.getText(),
-                txtDescripcion.getText(),
-                precio,
-                cbxEstado.getValue(),
-                selectedOrden
-        );
-
-        // Agregar los mecánicos seleccionados en la tabla de mecánicos
-        // El usuario puede seleccionar múltiples mecánicos con Ctrl+Click
-        ObservableList<Repuesto> repuestosSeleccionados = tbRepuestos.getSelectionModel().getSelectedItems();
-        for (Repuesto repuesto : repuestosSeleccionados) {
-            Servicio.agregarRepuesto(repuesto);
-        }
-
-        return Servicio;
-    }
-
-
-    /**
-     *Metodo que elimina un paciente
-     */
     private void eliminarServicio() {
-        if (selectedServicio == null) {
-            System.err.println("Error: Debe seleccionar una Servicio para eliminar.");
-            return;
-        }
-
-        if (servicioController.eliminarServicio(selectedServicio)) {
+        if (selectedServicio != null && servicioController.eliminarServicio(selectedServicio)) {
             listaServicio.remove(selectedServicio);
             limpiarCampos();
             limpiarSeleccion();
@@ -372,57 +222,53 @@ public class ServicioVC {
     }
 
     private void modificarServicio() {
-        if (selectedServicio == null) {
-            System.err.println("Error: Debe seleccionar una Servicio para modificar.");
-            return;
-        }
-
-        Servicio ServicioActualizada = buildServicio();
-
-
-        if (ServicioActualizada != null && servicioController.actualizarServicio(selectedServicio.getIdServicio(), ServicioActualizada)) {
-            ServicioActualizada.descontarStockRepuestos();
+        if (selectedServicio == null) return;
+        Servicio actualizado = buildServicio();
+        if (actualizado != null && servicioController.actualizarServicio(selectedServicio.getIdServicio(), actualizado)) {
+            App.taller.finalizaServicio();
+            actualizado.descontarStockRepuestos();
             int index = listaServicio.indexOf(selectedServicio);
-            listaServicio.set(index, ServicioActualizada);
-            limpiarCampos();
+            if (index >= 0) listaServicio.set(index, actualizado);
+            tbServicio.update();
             limpiarSeleccion();
+            limpiarCampos();
         }
     }
 
+    private Servicio buildServicio() {
+        if (selectedOrden == null || txtID.getText().isEmpty() || cbxEstado.getValue() == null) return null;
 
+        Servicio s = new Servicio(
+                txtID.getText(),
+                txtDescripcion.getText(),
+                Double.parseDouble(txtPrecioMO.getText()),
+                cbxEstado.getValue(),
+                selectedOrden
+        );
 
-    /**
-     * Metodo que limpia la seleccion de la tabla
-     */
+        List<Repuesto> seleccionados = List.copyOf(tbRepuestos.getSelectionModel().getSelectedValues());
+        for (Repuesto r : seleccionados) s.agregarRepuesto(r);
+
+        return s;
+    }
+
     private void limpiarSeleccion() {
+        tbServicio .getSelectionModel().clearSelection();
+        tbOrden    .getSelectionModel().clearSelection();
         tbRepuestos.getSelectionModel().clearSelection();
-        tbOrden.getSelectionModel().clearSelection();
-        tbServicio.getSelectionModel().clearSelection();
         limpiarCampos();
     }
 
-    /**
-     *Metodo qi¿ue limpia los acmpos del paciente seleccionado
-     */
     private void limpiarCampos() {
-        txtID.clear();
-        txtPrecioMO.clear();
+        txtID.clear(); txtPrecioMO.clear(); txtDescripcion.clear();
         cbxEstado.setValue(null);
-        txtDescripcion.clear();
-        tbOrden.getSelectionModel().clearSelection();
-        tbRepuestos.getSelectionModel().clearSelection();
+        selectedServicio = null;
+        selectedOrden    = null;
     }
 
-    /**
-     *metodo que seta APP
-     * @param app
-     */
     public void setApp(App app) {
         this.app = app;
-
-        ObservableList<Servicio.EstadoServicio> options = FXCollections.observableArrayList(Servicio.EstadoServicio.values());
-        cbxEstado.setItems((options));
+        cbxEstado.setItems(FXCollections.observableArrayList(Servicio.EstadoServicio.values()));
     }
-
 }
 
